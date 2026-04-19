@@ -1,0 +1,49 @@
+---
+title: "Quartoで、コピペミスしないプレゼンテーション資料作成"
+author: 伊東宏樹
+date: 2026-05-30
+lang: ja
+format: revealjs
+embed-resources: true
+slide-number: true
+---
+
+## プレゼンテーション資料作成
+
+- コピー&ペースト（手作業）の誤りがない
+
+- シンプル
+
+## 役所とかの資料でありがちな例
+
+![生成AI (Gemini) で作成したイメージです](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png)
+
+## 問題点
+
+- そもそも字が小さくて読みにくい
+
+- 気が散る
+
+- コピー&ペーストでグラフを貼り付けていると、データに修正があったときに直し忘れがち
+
+## Quarto
+
+## RStudio
+
+## YAMLヘッダー
+
+コードセル
+
+```{{r}}
+1 + 2
+```
+
+結果
+
+```{r}
+#| echo: false
+
+1 + 2
+```
+
+グラフ

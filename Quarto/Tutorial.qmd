@@ -1,0 +1,297 @@
+---
+title: "Rをつかってみよう"
+author: "伊東宏樹"
+date: 2026-05-30
+lang: ja
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    code-copy: true
+embed-resources: true
+slide-number: true
+---
+
+## 本日の内容
+
+-   Rとは?
+
+-   RStudio
+
+-   基本的な使い方
+
+-   処理に向いたデータ形式 (Tidy data)
+
+-   グラフ作成
+
+## 自己紹介
+
+-   氏名: 伊東宏樹
+
+-   個人事業主（[伊東生態統計研究室](https://ito4303.sakura.ne.jp/)）
+
+    -   データ解析、執筆・翻訳、研修講師などお引き受けいたします。
+
+-   1991〜2024年まで森林総合研究所勤務（森林生態学）
+
+-   出版物: 『[BUGSで学ぶ階層モデリング入門](https://www.kyoritsu-pub.co.jp/book/b10003729.html)』『[生態学のための階層モデリング](https://www.kyoritsu-pub.co.jp/book/b10003301.html)』（以上共訳）など
+
+## Rとは?
+
+-   [統計計算とグラフィックスのためのシステム](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f)（言語と環境）
+
+-   オープンソース
+
+-   無料でつかえる
+
+-   豊富なパッケージ（後述）で機能を追加できる
+
+    -   統計解析の手法はだいたいなんでもある
+
+## RStudio
+
+-   Posit社が開発しているR向け統合開発環境（IDE）
+
+-   ダウンロード: <https://posit.co/download/rstudio-desktop/>
+
+-   プロジェクトによりファイル群を管理
+
+-   R MarkdownやQuartoによる文書作成
+
+## Positron
+
+-   Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
+
+-   ダウンロード: <https://positron.posit.co/download.html>
+
+-   VS Codeベース
+
+-   R以外にPythonにも対応
+
+-   おもにRを使うR初心者にはRStudioの方がおすすめ
+
+## Rのインストール
+
+-   CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
+
+    -   ミラー
+        -   日本 <https://ftp.yz.yamagata-u.ac.jp/pub/cran/>
+        -   クラウド <https://cloud.r-project.org/>
+
+-   各OS用パッケージシステム（homebrew, winget, ...）からもインストールできる
+
+    -   RStudioもHomebrewやwingetからインストールできる
+
+## 具体的なインストール方法
+
+詳細は下記リンク先などをご覧ください。
+
+-   [Rをはじめよう: RとRStudioのインストール（Windows & Mac）](https://ito4303.github.io/R_Book/install.html)
+
+-   [はじめてのR言語 with Gemini CLI](https://www.trifields.jp/document/r-beginner-with-gemini-cli.html) (西本さん)
+
+## パッケージ
+
+-   特定の解析方法やツールなどの関数やデータなどをまとめたもの
+
+-   [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
+
+-   かなり特殊な統計解析用のパッケージでもいろいろ揃っている
+
+-   CRAN掲載分で、2026年4月現在、2万3000以上
+
+-   ユーザーが自分で作って公開できる
+
+## CRAN Task Views
+
+分野ごとのパッケージの概要
+
+-   <https://cran.r-project.org/web/views/>
+
+-   日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
+
+## GUI環境
+
+コマンドラインの操作が苦手な方にはGUI環境もあり
+
+-   R Commander ([Rcmdr](https://cran.r-project.org/package=Rcmdr)パッケージ)
+-   [EZR](https://www.jichi.ac.jp/usr/hema/EZR/statmed.html)
+-   [jamovi](https://www.jamovi.org)
+-   [JASP](https://jasp-stats.org)
+-   [Bluesky Statistics](https://www.blueskystatistics.com)
+
+## とはいえ
+
+RStudioからRを使うのがおすすめ
+
+## RStudioの設定とか
+
+実際の画面をご覧ください
+
+## 実演（基本的な使い方）
+
+-   計算
+
+-   ヘルプ
+
+-   データの型
+
+## 処理に向いたデータ形式
+
+Tidy data（整然データ）
+
+## Tidy dataとは
+
+1.  個々の変数 (variable) が1つの列 (column) をなす。
+
+2.  個々の観測 (observation) が1つの行 (row) をなす。
+
+3.  個々の観測の構成単位の類型 (type of observational unit) が1つの表 (table) をなす。
+
+4.  個々の値 (value) が1つのセル (cell) をなす。
+
+::: {style="text-align: right;"}
+（[整然データとはなにか](https://id.fnshr.info/2017/01/09/tidy-data-intro/)）
+:::
+
+## Tidyでないデータの例
+
+```{r}
+#| label: get-data
+#| include: false
+
+library(jmastats)
+library(tidyverse)
+library(units)
+library(gt)
+
+sites <- c("札幌", "東京", "那覇")
+year <- 2026
+month <- 1
+day <- c(8, 9)
+
+station <- stations |>
+  dplyr::filter(station_name %in% sites) |>
+  dplyr::distinct(station_name, block_no)
+df <- purrr::map(
+  1:nrow(station),
+  \(i) {
+    jma_collect(item = "daily", block_no = station[i, ]$block_no,
+                year = year, month = month) |>
+      dplyr::select(date, temperature) |>
+      tidyr::unnest(cols = temperature) |>
+      parse_unit() |>
+      dplyr::filter(date %in% make_date(year, month, day)) |>
+      dplyr::mutate(station = station[i, ]$station_name)
+  }) |>
+  dplyr::bind_rows() |>
+  dplyr::mutate(max = as.numeric(max),
+                min = as.numeric(min)) |>
+  dplyr::select(station, date, max, min)
+```
+
+```{r}
+#| echo: false
+
+tbl_wide <- df |>
+  tidyr::pivot_wider(names_from = date, values_from = c(max, min))
+#write_tsv(tbl_wide, file.path("data", "kion.tsv"))
+
+tbl_wide |>
+  gt::gt() |>
+  gt::tab_spanner(label = "最高気温(℃)",
+                  columns = c(`max_2026-01-08`, `max_2026-01-09`)) |>
+  gt::tab_spanner(label = "最低気温(℃)",
+                  columns = c(`min_2026-01-08`, `min_2026-01-09`)) |>
+  gt::cols_label(`max_2026-01-08` = "2026-01-08",
+                 `max_2026-01-09` = "2026-01-09",
+                 `min_2026-01-08` = "2026-01-08",
+                 `min_2026-01-09` = "2026-01-09") |>
+  gt::opt_table_font(font = "Noto Sans JP", size = 32)
+```
+
+## Tidyデータにしました
+
+```{r}
+#| echo: false
+
+df |>
+  gt::gt() |>
+  gt::cols_label(station = "地点",
+                 date = "日付",
+                 max = html("最高気温<br>(℃)"),
+                 min = html("最低気温<br>(℃)")) |>
+  gt::opt_table_font(font = "Noto Sans JP", size = 36)
+```
+
+## tidyverse
+
+-   Tidyなデータ処理のためのパッケージ群
+-   tidyverseパッケージ（メタパッケージ）
+    -   tidyr
+    -   dplyr
+    -   ggplot2
+    -   などなど
+
+```{=html}
+<!--
+
+## データサイエンスのモデル
+
+![](https://r4ds.hadley.nz/diagrams/data-science/base.png)
+
+::: {style="text-align: right;"}
+([R for Data Science](https://r4ds.hadley.nz/intro.html))
+:::
+
+-->
+```
+
+## データの読み込み
+
+-   CSVファイル
+
+    -   標準の`read.csv`関数
+
+    -   readrパッケージの`read_csv`関数
+
+-   Excelファイル
+
+    -   readxlパッケージの`read_excel`関数
+
+RStudioではメニューからも実行可能
+
+## 実演（パッケージ利用とTidy data)
+
+-   パッケージの読み込み
+
+-   Tidy data
+
+-   tidyverseを使ったデータ処理
+
+## グラフの作成
+
+-   Rのグラフ作成環境
+
+    -   デフォルトで組み込みのグラフ作成関数群（base graphics）
+
+    -   ggplot2
+
+    -   plotly など
+
+## 実演（グラフの作成）
+
+-   ggplot2パッケージを使用する方法
+
+-   デフォルトのグラフィック環境(base graphics)を使用する方法
+
+## さらに知るには
+
+-   地域コミュニティ
+
+    -   [Kanazawa.R](https://kanazawar.connpass.com), [Tokyo.R](https://tokyor.connpass.com), [SappoRo.R](https://www.urano-ken.com/sapporor/), [fukuoka.R](https://fukuoka-r.connpass.com), [IRUMA.R](https://irumar.connpass.com), ...
+
+-   [r-wakalang](https://r-wakalang.slack.com/) (Slack)
+
+-   [mandaRa](https://scrapbox.io/mandaRa/) (scrapbox.io)
+
+-   [RjpWiki](https://www.okadajp.org/RWiki/)
