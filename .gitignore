@@ -59,3 +59,6 @@ rsconnect/
 
 # Quarto files
 *_files/
+
+# GBIF download
+*.zip

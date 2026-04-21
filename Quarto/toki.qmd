@@ -1,0 +1,55 @@
+---
+title: "トキの分布をしらべる"
+author: "伊東宏樹"
+date: 2026-05-30
+lang: ja
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    code-copy: true
+embed-resources: true
+slide-number: true
+---
+
+## はじめに
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(rgbif)
+
+species_data <- name_backbone("Nipponia nippon")
+print(species_data)
+```
+
+## GBIF
+
+```{r}
+#| label: occ_download
+
+taxon_key <- species_data$usageKey
+occ_info <- occ_download(pred("taxonKey", taxon_key),
+                         pred("hasCoordinate", TRUE))
+(meta <- occ_download_meta(occ_info))
+```
+
+```{r}
+occ_download_wait(occ_info)
+x <- occ_download_get(occ_info)
+df <- occ_download_import(x)
+```
+
+leaflet
+
+```{r}
+library(leaflet)
+
+map <- leaflet() %>%
+  addTiles() %>%
+  setView(lng = 125, lat = 35, zoom = 4) %>%
+  addCircleMarkers(lng = df$decimalLongitude,
+                   lat = df$decimalLatitude,
+                   radius = 5)
+map
+```

@@ -1,5 +1,5 @@
 ---
-title: "Rをつかってみよう"
+title: "Rをつかってみよう（2026年版）"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
@@ -13,127 +13,131 @@ slide-number: true
 
 ## 本日の内容
 
--   Rとは?
+- Rとは?
 
--   RStudio
+- RStudio
 
--   基本的な使い方
+- 基本的な使い方
 
--   処理に向いたデータ形式 (Tidy data)
+- 処理に向いたデータ形式 (Tidy data)
 
--   グラフ作成
+- グラフ作成
 
 ## 自己紹介
 
--   氏名: 伊東宏樹
+- 氏名: 伊東宏樹
 
--   個人事業主（[伊東生態統計研究室](https://ito4303.sakura.ne.jp/)）
+- 個人事業主（[伊東生態統計研究室](https://ito4303.sakura.ne.jp/)）
 
-    -   データ解析、執筆・翻訳、研修講師などお引き受けいたします。
+  - データ解析、執筆・翻訳、研修講師などお引き受けいたします。
 
--   1991〜2024年まで森林総合研究所勤務（森林生態学）
+- 1991〜2024年まで森林総合研究所勤務（森林生態学）
 
--   出版物: 『[BUGSで学ぶ階層モデリング入門](https://www.kyoritsu-pub.co.jp/book/b10003729.html)』『[生態学のための階層モデリング](https://www.kyoritsu-pub.co.jp/book/b10003301.html)』（以上共訳）など
+- 出版物: 『[BUGSで学ぶ階層モデリング入門](https://www.kyoritsu-pub.co.jp/book/b10003729.html)』『[生態学のための階層モデリング](https://www.kyoritsu-pub.co.jp/book/b10003301.html)』（以上共訳）など
 
 ## Rとは?
 
--   [統計計算とグラフィックスのためのシステム](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f)（言語と環境）
+- [統計計算とグラフィックスのためのシステム](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f)（言語と環境）
 
--   オープンソース
+  - 統計分析のために開発された
 
--   無料でつかえる
+- オープンソース
 
--   豊富なパッケージ（後述）で機能を追加できる
+- 無料でつかえる
 
-    -   統計解析の手法はだいたいなんでもある
+- 豊富なパッケージ（後述）で機能を追加できる
+
+  - 統計解析の手法はだいたいなんでもある
 
 ## RStudio
 
--   Posit社が開発しているR向け統合開発環境（IDE）
+- Posit社が開発しているR向け統合開発環境 (IDE)
 
--   ダウンロード: <https://posit.co/download/rstudio-desktop/>
+- Rのプログラミングに便利
 
--   プロジェクトによりファイル群を管理
+- 「プロジェクト」によりファイル群を管理
 
--   R MarkdownやQuartoによる文書作成
+- R MarkdownやQuartoによる文書作成
+
+- ダウンロード: <https://posit.co/download/rstudio-desktop/>
 
 ## Positron
 
--   Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
+- Posit社が開発している[データサイエンスIDE](https://positron.posit.co/)
 
--   ダウンロード: <https://positron.posit.co/download.html>
+- VS Codeベース
 
--   VS Codeベース
+- R以外にPythonにも対応
 
--   R以外にPythonにも対応
+- ダウンロード: <https://positron.posit.co/download.html>
 
--   おもにRを使うR初心者にはRStudioの方がおすすめ
+- おもにRを使うR初心者にはRStudioの方がおすすめ → 今回はRStudioを使用します
 
 ## Rのインストール
 
--   CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
+- CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
 
-    -   ミラー
-        -   日本 <https://ftp.yz.yamagata-u.ac.jp/pub/cran/>
-        -   クラウド <https://cloud.r-project.org/>
+  - ミラー
+    - 日本 <https://ftp.yz.yamagata-u.ac.jp/pub/cran/>
+    - クラウド <https://cloud.r-project.org/>
 
--   各OS用パッケージシステム（homebrew, winget, ...）からもインストールできる
+- 各OS用パッケージシステム（homebrew, winget, ...）からもインストールできる
 
-    -   RStudioもHomebrewやwingetからインストールできる
+  - RStudioもHomebrewやwinget利用可能
 
 ## 具体的なインストール方法
 
 詳細は下記リンク先などをご覧ください。
 
--   [Rをはじめよう: RとRStudioのインストール（Windows & Mac）](https://ito4303.github.io/R_Book/install.html)
+- [Rをはじめよう: RとRStudioのインストール（Windows & Mac）](https://ito4303.github.io/R_Book/install.html)
 
--   [はじめてのR言語 with Gemini CLI](https://www.trifields.jp/document/r-beginner-with-gemini-cli.html) (西本さん)
+- [はじめてのR言語 with Gemini CLI](https://www.trifields.jp/document/r-beginner-with-gemini-cli.html) (西本さん)
 
 ## パッケージ
 
--   特定の解析方法やツールなどの関数やデータなどをまとめたもの
+- 特定の解析方法やツールなどの関数やデータなどをまとめたもの
 
--   [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
+- [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
 
--   かなり特殊な統計解析用のパッケージでもいろいろ揃っている
+- 専門的な統計分析用のパッケージもいろいろ揃っている
 
--   CRAN掲載分で、2026年4月現在、2万3000以上
+- CRAN掲載分で、2026年4月現在、2万3000以上
 
--   ユーザーが自分で作って公開できる
+- ユーザーが自分で作って公開できる
 
 ## CRAN Task Views
 
 分野ごとのパッケージの概要
 
--   <https://cran.r-project.org/web/views/>
+- <https://cran.r-project.org/web/views/>
 
--   日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
+- 日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
 
 ## GUI環境
 
 コマンドラインの操作が苦手な方にはGUI環境もあり
 
--   R Commander ([Rcmdr](https://cran.r-project.org/package=Rcmdr)パッケージ)
--   [EZR](https://www.jichi.ac.jp/usr/hema/EZR/statmed.html)
--   [jamovi](https://www.jamovi.org)
--   [JASP](https://jasp-stats.org)
--   [Bluesky Statistics](https://www.blueskystatistics.com)
+- R Commander ([Rcmdr](https://cran.r-project.org/package=Rcmdr)パッケージ)
+- [EZR](https://www.jichi.ac.jp/usr/hema/EZR/statmed.html)
+- [jamovi](https://www.jamovi.org)
+- [JASP](https://jasp-stats.org)
+- [Bluesky Statistics](https://www.blueskystatistics.com)
 
 ## とはいえ
 
-RStudioからRを使うのがおすすめ
-
-## RStudioの設定とか
-
-実際の画面をご覧ください
+RStudioからRを使うのがおすすめ → 今回はRStudioを使用します（2回目）
 
 ## 実演（基本的な使い方）
 
--   計算
+- RStudioの設定
 
--   ヘルプ
+- Rをつかってみる
 
--   データの型
+  - 計算
+
+  - ヘルプ
+
+  - データの型
 
 ## 処理に向いたデータ形式
 
@@ -225,12 +229,12 @@ df |>
 
 ## tidyverse
 
--   Tidyなデータ処理のためのパッケージ群
--   tidyverseパッケージ（メタパッケージ）
-    -   tidyr
-    -   dplyr
-    -   ggplot2
-    -   などなど
+- Tidyなデータ処理のためのパッケージ群
+- tidyverseパッケージ（メタパッケージ）
+  - tidyr
+  - dplyr
+  - ggplot2
+  - などなど
 
 ```{=html}
 <!--
@@ -248,50 +252,51 @@ df |>
 
 ## データの読み込み
 
--   CSVファイル
+- CSVファイル
 
-    -   標準の`read.csv`関数
+  - 標準の`read.csv`関数
+  - readrパッケージの`read_csv`関数
 
-    -   readrパッケージの`read_csv`関数
+- Excelファイル
 
--   Excelファイル
-
-    -   readxlパッケージの`read_excel`関数
+  - readxlパッケージの`read_excel`関数
 
 RStudioではメニューからも実行可能
 
 ## 実演（パッケージ利用とTidy data)
 
--   パッケージの読み込み
+- パッケージの読み込み
 
--   Tidy data
+- Tidy data
 
--   tidyverseを使ったデータ処理
+- tidyverseを使ったデータ処理
 
 ## グラフの作成
 
--   Rのグラフ作成環境
+- Rのグラフ作成環境
 
-    -   デフォルトで組み込みのグラフ作成関数群（base graphics）
+  - デフォルトで組み込みのグラフ作成関数群（base graphics）
 
-    -   ggplot2
+  - ggplot2
 
-    -   plotly など
+  - plotly など
 
 ## 実演（グラフの作成）
 
--   ggplot2パッケージを使用する方法
+- ggplot2パッケージを使用する方法
 
--   デフォルトのグラフィック環境(base graphics)を使用する方法
+- デフォルトのグラフィック環境(base graphics)を使用する方法
 
 ## さらに知るには
 
--   地域コミュニティ
+- 各種プロジェクトの公式ドキュメント
 
-    -   [Kanazawa.R](https://kanazawar.connpass.com), [Tokyo.R](https://tokyor.connpass.com), [SappoRo.R](https://www.urano-ken.com/sapporor/), [fukuoka.R](https://fukuoka-r.connpass.com), [IRUMA.R](https://irumar.connpass.com), ...
+- ネット検索
 
--   [r-wakalang](https://r-wakalang.slack.com/) (Slack)
+- 生成AI（ウソを教えることがあるので注意）
 
--   [mandaRa](https://scrapbox.io/mandaRa/) (scrapbox.io)
+- 地域コミュニティ
 
--   [RjpWiki](https://www.okadajp.org/RWiki/)
+  - [Kanazawa.R](https://kanazawar.connpass.com), [Tokyo.R](https://tokyor.connpass.com), [SappoRo.R](https://www.urano-ken.com/sapporor/), [fukuoka.R](https://fukuoka-r.connpass.com), [IRUMA.R](https://irumar.connpass.com), ...
+
+- [r-wakalang](https://r-wakalang.slack.com/) (Slack)

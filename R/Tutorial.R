@@ -183,13 +183,13 @@ install.packages("setariaviridis") # install.packagesはパッケージを
 # setariaviridis は、エノコログサ(Setaria viridis)の測定データを収めたパッケージ
 
 library(setariaviridis) # library関数でパッケージを読み込む
-?setariaviridis # パッケージのヘルプを表示
+help(setariaviridis) # パッケージのヘルプを表示
 
 View(setaria_viridis)    # データを表計算ソフトのように表示
 
 summary(setaria_viridis) # データの要約を表示
 
-grimpse(setaria_viridis) # データの構造を表示
+glimpse(setaria_viridis) # データの構造を表示
                          # glimpse()はdplyrパッケージの関数
 
 # dplyrパッケージを使ったデータの抽出
@@ -211,11 +211,11 @@ setaria_viridis |>
 member[member$name == "佐藤", ] # nameが佐藤の行を取り出す
 
 member |>
-  dplyr::filter(name == "佐藤") # tidyverseのdplyrの書き方
+  dplyr::filter(name == "佐藤") # tidyverseのdplyrをつかう書き方
 
 member |>
   dplyr::filter(name == "佐藤" | name == "鈴木") |>
-  dplyr::select(age) # nameが佐藤の行を取り出して、age列を抽出
+  dplyr::select(age) # nameが佐藤または鈴木の行を取り出して、age列を抽出
 
 member |>
   dplyr::filter(name == "佐藤" | name == "鈴木") |>
@@ -231,7 +231,7 @@ member |>
 
 # ggplot2パッケージはtidyverseに含まれている
 
-?ggplot2 # ggplot2のヘルプを表示
+help(ggplot2) # ggplot2のヘルプを表示
 
 # culm_lengthを横軸に、panicle_lengthを縦軸にした散布図を描く
 
