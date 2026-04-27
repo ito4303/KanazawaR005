@@ -1,5 +1,5 @@
 ---
-title: "Rをつかってみよう（2026年版）"
+title: "Rをつかってみよう"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
@@ -19,7 +19,7 @@ slide-number: true
 
 - 基本的な使い方
 
-- 処理に向いたデータ形式 (Tidy data)
+- Tidyなデータとデータ処理
 
 - グラフ作成
 
@@ -39,8 +39,6 @@ slide-number: true
 
 - [統計計算とグラフィックスのためのシステム](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f)（言語と環境）
 
-  - 統計分析のために開発された
-
 - オープンソース
 
 - 無料でつかえる
@@ -49,43 +47,19 @@ slide-number: true
 
   - 統計解析の手法はだいたいなんでもある
 
-## RStudio
-
-- Posit社が開発しているR向け統合開発環境 (IDE)
-
-- Rのプログラミングに便利
-
-- 「プロジェクト」によりファイル群を管理
-
-- R MarkdownやQuartoによる文書作成
-
-- ダウンロード: <https://posit.co/download/rstudio-desktop/>
-
-## Positron
-
-- Posit社が開発している[データサイエンスIDE](https://positron.posit.co/)
-
-- VS Codeベース
-
-- R以外にPythonにも対応
-
-- ダウンロード: <https://positron.posit.co/download.html>
-
-- おもにRを使うR初心者にはRStudioの方がおすすめ → 今回はRStudioを使用します
-
-## Rのインストール
+## インストール
 
 - CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
 
   - ミラー
+
     - 日本 <https://ftp.yz.yamagata-u.ac.jp/pub/cran/>
+
     - クラウド <https://cloud.r-project.org/>
 
 - 各OS用パッケージシステム（homebrew, winget, ...）からもインストールできる
 
-  - RStudioもHomebrewやwinget利用可能
-
-## 具体的なインストール方法
+## インストール方法
 
 詳細は下記リンク先などをご覧ください。
 
@@ -99,19 +73,35 @@ slide-number: true
 
 - [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
 
-- 専門的な統計分析用のパッケージもいろいろ揃っている
-
-- CRAN掲載分で、2026年4月現在、2万3000以上
+- かなり特殊な統計解析用のパッケージでもいろいろ揃っている
 
 - ユーザーが自分で作って公開できる
 
-## CRAN Task Views
+## RStudio
 
-分野ごとのパッケージの概要
+- Posit社が開発しているR向け統合開発環境（IDE）
 
-- <https://cran.r-project.org/web/views/>
+- ダウンロード: <https://posit.co/download/rstudio-desktop/>
 
-- 日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
+- プロジェクトによりファイル群を管理
+
+- R MarkdownやQuartoによる文書作成
+
+## Positron
+
+- Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
+
+- ダウンロード: <https://positron.posit.co/download.html>
+
+- R以外にPythonにも対応
+
+- VS Codeベース
+
+- おもにRを使うR初心者にはRStudioの方がおすすめ
+
+## RStudioの設定とか
+
+実際の画面をご覧ください
 
 ## GUI環境
 
@@ -123,35 +113,25 @@ slide-number: true
 - [JASP](https://jasp-stats.org)
 - [Bluesky Statistics](https://www.blueskystatistics.com)
 
-## とはいえ
-
-RStudioからRを使うのがおすすめ → 今回はRStudioを使用します（2回目）
-
 ## 実演（基本的な使い方）
 
-- RStudioの設定
+- 計算
 
-- Rをつかってみる
+- ヘルプ
 
-  - 計算
+- データの型
 
-  - ヘルプ
+## Tidyなデータとデータ処理
 
-  - データの型
+- Tidy data（整然データ）
 
-## 処理に向いたデータ形式
+  1.  個々の変数 (variable) が1つの列 (column) をなす。
 
-Tidy data（整然データ）
+  2.  個々の観測 (observation) が1つの行 (row) をなす。
 
-## Tidy dataとは
+  3.  個々の観測の構成単位の類型 (type of observational unit) が1つの表 (table) をなす。
 
-1.  個々の変数 (variable) が1つの列 (column) をなす。
-
-2.  個々の観測 (observation) が1つの行 (row) をなす。
-
-3.  個々の観測の構成単位の類型 (type of observational unit) が1つの表 (table) をなす。
-
-4.  個々の値 (value) が1つのセル (cell) をなす。
+  4.  個々の値 (value) が1つのセル (cell) をなす。
 
 ::: {style="text-align: right;"}
 （[整然データとはなにか](https://id.fnshr.info/2017/01/09/tidy-data-intro/)）
@@ -255,6 +235,7 @@ df |>
 - CSVファイル
 
   - 標準の`read.csv`関数
+
   - readrパッケージの`read_csv`関数
 
 - Excelファイル
@@ -289,14 +270,12 @@ RStudioではメニューからも実行可能
 
 ## さらに知るには
 
-- 各種プロジェクトの公式ドキュメント
-
-- ネット検索
-
-- 生成AI（ウソを教えることがあるので注意）
-
 - 地域コミュニティ
 
   - [Kanazawa.R](https://kanazawar.connpass.com), [Tokyo.R](https://tokyor.connpass.com), [SappoRo.R](https://www.urano-ken.com/sapporor/), [fukuoka.R](https://fukuoka-r.connpass.com), [IRUMA.R](https://irumar.connpass.com), ...
 
 - [r-wakalang](https://r-wakalang.slack.com/) (Slack)
+
+- [mandaRa](https://scrapbox.io/mandaRa/) (scrapbox.io)
+
+- [RjpWiki](https://www.okadajp.org/RWiki/)

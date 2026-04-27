@@ -23,6 +23,7 @@
 
 # RStudio files
 .Rproj.user/
+.positai
 
 # produced vignettes
 vignettes/*.html
@@ -62,3 +63,4 @@ rsconnect/
 
 # GBIF download
 *.zip
+

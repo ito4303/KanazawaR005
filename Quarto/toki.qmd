@@ -45,11 +45,18 @@ leaflet
 ```{r}
 library(leaflet)
 
-map <- leaflet() %>%
-  addTiles() %>%
-  setView(lng = 125, lat = 35, zoom = 4) %>%
+map <- leaflet() |>
+  addTiles() |>
+  setView(lng = 125, lat = 35, zoom = 4) |>
   addCircleMarkers(lng = df$decimalLongitude,
                    lat = df$decimalLatitude,
-                   radius = 5)
+                   color = "red",
+                   radius = 3)
+```
+
+view
+
+```{r}
 map
 ```
+

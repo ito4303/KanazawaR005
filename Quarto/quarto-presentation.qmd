@@ -1,5 +1,5 @@
 ---
-title: "Quartoで、コピペミスしないプレゼンテーション資料作成"
+title: Quartoで、コピペミスしないプレゼンテーション資料作成
 author: 伊東宏樹
 date: 2026-05-30
 lang: ja
@@ -8,15 +8,15 @@ embed-resources: true
 slide-number: true
 ---
 
-## プレゼンテーション資料作成
+## 本日の内容
 
-- コピー&ペースト（手作業）の誤りがない
+- Quartoとは
 
-- シンプル
+- Quartoをつかった資料作成
 
 ## 役所とかの資料でありがちな例
 
-![生成AI (Gemini) で作成したイメージです](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png)
+![生成AI (Gemini) で作成したイメージです。実在の組織・団体とは関係ありません。](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png)
 
 ## 問題点
 
@@ -24,26 +24,130 @@ slide-number: true
 
 - ゴチャゴチャしていて気が散る
 
-- コピー&ペーストでグラフを貼り付けていると、データに修正があったときなどに直し忘れがち
+- **コピー&ペーストでグラフを貼り付けていると、データに修正があったときなどに直し忘れがち**
+
+## シンプルで、データからグラフまで一貫
 
 ## Quarto
 
-## RStudio
+- <https://quarto.org/>
+
+- オープンソースの科学技術出版システム
+
+- テキストファイルで文書の構造や内容を記述
+
+  - Markdownを拡張した記法
+  - Gitなどによるバージョン管理
+
+- Python, R, Julia, Observableに対応
+
+- HTML, PDF, MS Word等の形式で出力
+
+- 再現可能な文書作成
+
+## RStudioから作成
+
+File \> New File \> Quarto Presentation
+
+![](images/Quarto-Presentation.png)
+
+Reveal JSとKnitrを使用
 
 ## YAMLヘッダー
 
-コードセル
+プレゼンテーションなら
 
-```{{r}}
-1 + 2
+```         
+---
+title: Quartoで、コピペミスしないプレゼンテーション資料作成
+author: 伊東宏樹
+date: 2026-05-30
+lang: ja
+format: revealjs
+embed-resources: true
+---
 ```
 
-結果
+`format: revealjs`で、[reveal.js](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
+
+## 見出し
+
+Heading 2 (`##`)が各スライドの見出しになる
+
+## 本文
+
+そのまま
+
+マークダウン記法
+
+## コードセル
+
+```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
+
+````
+```{r}
+mean(1:100)
+```
+````
 
 ```{r}
 #| echo: false
 
-1 + 2
+mean(1:100)
 ```
 
-グラフ
+## オプション
+
+`#|` のあとに記述
+
+- `#| label: ラベル`
+- `#| echo: true/false`
+- `#| eval: true/false`
+- `#| output: true/false`
+- など
+
+<https://quarto.org/docs/reference/cells/cells-knitr.html>
+
+<https://r-wasm.github.io/quarto-live/reference/cell-options.html>
+
+## インラインコード
+
+`` `r `` と `` ` `` で囲んだ中にRのコードを記述
+
+`` `r `` `` sd(1:100)` `` = `r sd(1:100)`
+
+## グラフ
+
+```{r}
+#| label: plot-example
+#| echo: true
+
+library(ggplot2)
+data(penguins)
+
+ggplot(penguins, aes(x = bill_len, y = bill_dep,
+                     colour = species)) +
+  geom_point()
+```
+
+## 数式
+
+インライン数式 `$`と`$`ではさむ
+
+`$\sqrt(x)$` = $\sqrt(x)$
+
+`$$` と `$$` に はさまれた行にLaTeX記法で数式を記述できる
+
+$$\Pr(X=x \mid \lambda) = \frac{e^{-\lambda}\lambda^x}{x!}$$
+
+```         
+$$
+\Pr(X = x \mid x) = \frac{e^{-\lambda} \lambda^x}{x!}
+$$
+```
+
+## PDF出力
+
+左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力（ブラウザによってはずれるかもしれません）。
+
+## まとめ

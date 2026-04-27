@@ -82,7 +82,7 @@ member
 member$name      # name列を取り出す
 member[, 1]      # これでも同じ（Rの添え字は1から始まります）
 member[, "name"] # これでも同じ
-member[, 2:3]    # 2〜3列を取り出す
+member[, 2:3]    # 第2〜3列を取り出す
 
 # 行（観測）を取り出す
 
@@ -98,24 +98,73 @@ member[2, 1]      # これでも同じ
 member$name[2]    # これでも同じ
 
 
+#
+# 制御フロー
+#
+
+# 条件分岐
+
+x <- 1
+y <- 2
+
+if (x > y) {
+  print("xはyより大きい.")
+} else {
+  print("xはyより大きくない.")
+}
+
+# ループ
+
+for (i in 1:9) {
+  print(i)
+}
 
 
+for(a in c("A", "B", "x", "y")) {
+  b <- paste0(a, "0")   # paste0()は文字列を連結する関数
+  print(b)
+}
+
+z <- 10
+while(z > 0) {
+  z <- z - 1
+  print(z)
+}
+
+# Rでは、ループは制御フローを使うより関数を使ってベクトルとして
+# 処理する方が効率的
+# -> apply系関数やpurrrパッケージ
+# 今回は説明しません
+
+
+#
 # 記述統計
+#
 
-X <- 0:100 # 0から100までの整数のベクトル
+set.seed(123) # 擬似乱数の固定
 
-mean(X)     # 平均
-var(X)      # 不偏分散
-sd(X)       # 標準偏差
-quantile(X) # 四分位数
+# 平均0、標準偏差1の正規分布にしたがう乱数を
+# 100個生成
+# rnorm()は正規乱数を生成する関数
+
+x <- rnorm(100, mean = 0, sd = 1)
+
+# 各種統計関数
+
+mean(x)     # 平均
+median(x)   # 中央値
+var(x)      # 不偏分散
+sd(x)       # 標準偏差（不偏分散の平方根）
+quantile(x) # 四分位数
 
 
 
 #
-# パッケージ利用とTidy data
+# パッケージの利用とTidy data
 #
 
 # tidyverseパッケージをインストールする（依存パッケージもまとめてインストールする）
+# 1回だけすればよい（Rをバージョンアップしたら、再度必要な場合も）
 
 install.packages("tidyverse", dependencies = TRUE)
 
@@ -128,6 +177,8 @@ library(tidyverse)
 # スライド資料の気温データをファイルにしておきました
 
 file_path <- file.path("data", "kion.tsv") # file.path()はファイルパスを作る関数
+
+# ファイルを読み込む
 
 Kion <- readr::read_tsv(file_path) # read_tsv()はタブ区切りのデータを読み込む関数
 Kion # 読み込んだデータを表示
@@ -151,10 +202,12 @@ Kion_long |>
   pivot_wider(names_from = "item",         # "item"列の内容を新しい列の名前に
               values_from = "temperature") # "temperature"列の内容を新しい列の値に
 
-# "|>"はパイプ演算子と呼ばれ、左側の結果を右側の関数の第1引数として渡すもの
-# magrittrパッケージの %>% も同じ
+# "|>"はパイプ演算子と呼ばれ、左側の式の値を右側の関数の第1引数として渡すもの
+# magrittrパッケージの %>% も（だいたい）同じ
 
+# パイプ演算子の使い方
 # 平方根の和の自然対数を求めるといった場合
+# 関数をネストすると だんだんわかりにくくなってくる
 
 log(sum(sqrt(X)))
 
@@ -163,8 +216,9 @@ log(sum(sqrt(X)))
 X |>
   sqrt() |>
   sum() |>
-    log()
+  log()
 
+# データの変換に戻って
 # 縦長にしたデータをもとにもどす
 
 Kion_long |>
@@ -228,7 +282,6 @@ member |>
 #
 
 # ggplot2パッケージを使ったグラフの描画
-
 # ggplot2パッケージはtidyverseに含まれている
 
 help(ggplot2) # ggplot2のヘルプを表示
