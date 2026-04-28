@@ -7,8 +7,8 @@ format:
   revealjs:
     theme: [default, custom.scss]
     code-copy: true
-embed-resources: true
-slide-number: true
+    embed-resources: true
+    slide-number: true
 ---
 
 ## 本日の内容
@@ -19,7 +19,7 @@ slide-number: true
 
 - 基本的な使い方
 
-- Tidyなデータとデータ処理
+- 処理に向いたデータ形式 (Tidy data)
 
 - グラフ作成
 
@@ -47,7 +47,33 @@ slide-number: true
 
   - 統計解析の手法はだいたいなんでもある
 
-## インストール
+## RStudio
+
+- [Posit](https://posit.co/)社が開発しているR向け統合開発環境（IDE）
+
+  - Rのプログラミングに便利
+
+- 「プロジェクト」によりファイル群を管理
+
+- R MarkdownやQuartoによる文書作成
+
+- 2026.04版から[Posit AI](https://posit.co/products/ai)を統合
+
+- ダウンロード: <https://posit.co/download/rstudio-desktop/>
+
+## Positron
+
+- Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
+
+- ダウンロード: <https://positron.posit.co/download.html>
+
+- R以外にPythonにも対応
+
+- VS Codeベース
+
+- おもにRを使うR初心者にはRStudioの方がおすすめ
+
+## Rのインストール
 
 - CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
 
@@ -59,7 +85,9 @@ slide-number: true
 
 - 各OS用パッケージシステム（homebrew, winget, ...）からもインストールできる
 
-## インストール方法
+  - RStudioもHomebrewやwingetでインストール可能
+
+## 具体的なインストール方法
 
 詳細は下記リンク先などをご覧ください。
 
@@ -73,31 +101,19 @@ slide-number: true
 
 - [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
 
-- かなり特殊な統計解析用のパッケージでもいろいろ揃っている
+- 専門的な統計解析用のパッケージでもいろいろ揃っている
 
 - ユーザーが自分で作って公開できる
 
-## RStudio
+## CRAN Task Views
 
-- Posit社が開発しているR向け統合開発環境（IDE）
+分野ごとのパッケージの概要
 
-- ダウンロード: <https://posit.co/download/rstudio-desktop/>
+- <https://cran.r-project.org/web/views/>
 
-- プロジェクトによりファイル群を管理
+<!-- -->
 
-- R MarkdownやQuartoによる文書作成
-
-## Positron
-
-- Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
-
-- ダウンロード: <https://positron.posit.co/download.html>
-
-- R以外にPythonにも対応
-
-- VS Codeベース
-
-- おもにRを使うR初心者にはRStudioの方がおすすめ
+- 日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
 
 ## RStudioの設定とか
 
@@ -113,25 +129,39 @@ slide-number: true
 - [JASP](https://jasp-stats.org)
 - [Bluesky Statistics](https://www.blueskystatistics.com)
 
+## とはいえ
+
+::: {style="font-size: 200%;"}
+今回はRStudioを使用します（2回目）
+:::
+
 ## 実演（基本的な使い方）
 
-- 計算
+- RStudioの設定
 
-- ヘルプ
+- Rを使ってみる
 
-- データの型
+  - 計算
 
-## Tidyなデータとデータ処理
+  - ヘルプ
 
-- Tidy data（整然データ）
+  - データの型
 
-  1.  個々の変数 (variable) が1つの列 (column) をなす。
+## 処理に向いたデータ形式
 
-  2.  個々の観測 (observation) が1つの行 (row) をなす。
+::: {style="font-size: 200%;"}
+Tidy data（整然データ）
+:::
 
-  3.  個々の観測の構成単位の類型 (type of observational unit) が1つの表 (table) をなす。
+## Tidy dataとは
 
-  4.  個々の値 (value) が1つのセル (cell) をなす。
+1.  個々の変数 (variable) が1つの列 (column) をなす。
+
+2.  個々の観測 (observation) が1つの行 (row) をなす。
+
+3.  個々の観測の構成単位の類型 (type of observational unit) が1つの表 (table) をなす。
+
+4.  個々の値 (value) が1つのセル (cell) をなす。
 
 ::: {style="text-align: right;"}
 （[整然データとはなにか](https://id.fnshr.info/2017/01/09/tidy-data-intro/)）
@@ -270,12 +300,14 @@ RStudioではメニューからも実行可能
 
 ## さらに知るには
 
+- 各種プロジェクトの公式ドキュメント
+
+- ネット検索
+
+- 生成AI（ウソを教えることがあるので注意）
+
 - 地域コミュニティ
 
   - [Kanazawa.R](https://kanazawar.connpass.com), [Tokyo.R](https://tokyor.connpass.com), [SappoRo.R](https://www.urano-ken.com/sapporor/), [fukuoka.R](https://fukuoka-r.connpass.com), [IRUMA.R](https://irumar.connpass.com), ...
 
 - [r-wakalang](https://r-wakalang.slack.com/) (Slack)
-
-- [mandaRa](https://scrapbox.io/mandaRa/) (scrapbox.io)
-
-- [RjpWiki](https://www.okadajp.org/RWiki/)

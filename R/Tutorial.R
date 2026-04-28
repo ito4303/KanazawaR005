@@ -252,10 +252,12 @@ setaria_viridis |>
   dplyr::pull(culm_length) |>  # culm_length列を抽出
   mean()                       # 平均
 
-# パッケージ名::関数名 と書くと、library()関数でパッケージを読み込んで
+# パッケージ名::関数名 と書くと、library()でパッケージを読み込んで
 # おかなくても関数を使用できる
-# ほかのパッケージと関数名がかぶるときに、どのパッケージの関数か明示的に指定できる
-
+# また、ほかのパッケージと関数名がかぶるときに、どのパッケージの関数か
+# 明示的に指定できる
+# dplyrは、割とほかのパッケージと関数名がかぶりがちなので、明示的に
+# 指定する場合が多いようだ
 
 setaria_viridis |>
   dplyr::filter(culm_length > 60) # culm_lengthが60より大きいデータを抽出
@@ -275,7 +277,11 @@ member |>
   dplyr::filter(name == "佐藤" | name == "鈴木") |>
   dplyr::pull(age) # pull()はベクトルとして抽出
 
+member |>
+  dplyr::select(2) # 2列目を抽出
 
+member |>
+  dplyr::slice(2)  # 2行目を抽出
 
 #
 # グラフの作成

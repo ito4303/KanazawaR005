@@ -3,9 +3,10 @@ title: Quartoで、コピペミスしないプレゼンテーション資料作�
 author: 伊東宏樹
 date: 2026-05-30
 lang: ja
-format: revealjs
-embed-resources: true
-slide-number: true
+format:
+  revealjs:
+    embed-resources: true
+    slide-number: true
 ---
 
 ## 本日の内容
@@ -24,9 +25,17 @@ slide-number: true
 
 - ゴチャゴチャしていて気が散る
 
-- **コピー&ペーストでグラフを貼り付けていると、データに修正があったときなどに直し忘れがち**
+- **コピー&ペーストで数値やグラフを貼り付けていると、データに修正があったときなどに直し忘れがち**
 
-## シンプルで、データからグラフまで一貫
+  - **⇒ 再現可能性がない**
+
+## こうしたい
+
+::: incremental
+- データから結果（グラフ含む）まで一貫処理
+
+- QuartoとRで できます
+:::
 
 ## Quarto
 
@@ -55,6 +64,8 @@ Reveal JSとKnitrを使用
 
 ## YAMLヘッダー
 
+文書の先頭にメタデータを記述
+
 プレゼンテーションなら
 
 ```         
@@ -64,7 +75,6 @@ author: 伊東宏樹
 date: 2026-05-30
 lang: ja
 format: revealjs
-embed-resources: true
 ---
 ```
 
@@ -72,23 +82,21 @@ embed-resources: true
 
 ## 見出し
 
-Heading 2 (`##`)が各スライドの見出しになる
+- Heading 2 (`##`)が各スライドの見出し
+
+- スライドの区切りでもある
 
 ## 本文
 
-そのまま
+- マークダウン記法で記述
 
-マークダウン記法
-
-## コードセル
+## コードチャンク（コードセル）
 
 ```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
 
-````
-```{r}
+```{{r}}
 mean(1:100)
 ```
-````
 
 ```{r}
 #| echo: false
@@ -100,54 +108,153 @@ mean(1:100)
 
 `#|` のあとに記述
 
-- `#| label: ラベル`
-- `#| echo: true/false`
-- `#| eval: true/false`
-- `#| output: true/false`
+- `#| label: ラベル` - チャンクラベル
+- `#| echo: true/false` - コードを表示するか
+- `#| output: true/false` - 結果を表示するか
+- `#| eval: true/false` - コードを実行するか
+- `#| include: true/false` - コードと結果を表示するか（実行はされる）
 - など
 
-<https://quarto.org/docs/reference/cells/cells-knitr.html>
-
-<https://r-wasm.github.io/quarto-live/reference/cell-options.html>
+詳細はQuartoのレファレンス [Code Cells: Knitr](https://quarto.org/docs/reference/cells/cells-knitr.html) を参照
 
 ## インラインコード
 
-`` `r `` と `` ` `` で囲んだ中にRのコードを記述
+- 本文中にRの計算結果を含めたいとき
 
-`` `r `` `` sd(1:100)` `` = `r sd(1:100)`
+- `` `r `` `` 式` ``と書くと、レンダリング時にRの式が評価されて結果が埋め込まれる
+
+  - 例: `` `r `` `` sd(1:100)` `` = `r sd(1:100)`
 
 ## グラフ
+
+Rで作成したグラフがスライドに含まれる
 
 ```{r}
 #| label: plot-example
 #| echo: true
+#| eval: false
 
 library(ggplot2)
-data(penguins)
-
+data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
 ggplot(penguins, aes(x = bill_len, y = bill_dep,
-                     colour = species)) +
-  geom_point()
+                     colour = species, shape = species)) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(title = "ペンギンのデータ",
+       x = "Bill length (mm)", y = "Bill Depth (mm)",
+       colour = "Species", shape = "Species") +
+  theme_classic(base_size = 18, base_family = "YuGothic")
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| label: plot-example-run
+#| echo: false
+
+library(ggplot2)
+data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
+ggplot(penguins, aes(x = bill_len, y = bill_dep,
+                     colour = species, shape = species)) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(title = "ペンギンのデータ",
+       x = "嘴峰長 (mm)", y = "嘴高 (mm)",
+       colour = "種", shape = "種") +
+  theme_classic(base_size = 18, base_family = "YuGothic")
+```
+
+## 表
+
+- `knitr::kable()`や`gt::gt()`、`DT::datatable()`などの関数を利用可能
+
+- 下はgt()を使用した例
+
+```{r}
+#| label: table-example
+#| echo: true
+#| eval: false
+
+library(gt)
+penguins |>
+  dplyr::select(1:4) |>
+  dplyr::slice(c(1:3, 201:203, 301:303)) |>
+  gt(caption = "表: ペンギンのデータ") |>
+  cols_label(species ~ "種",
+             island ~ "島",
+             bill_len ~ "嘴峰長",
+             bill_dep ~ "嘴高") |>
+  cols_units(starts_with("bill") ~ "mm",
+             .units_pattern = "{1} ({2})") |>
+  opt_stylize() |>
+  opt_table_font(size = 32)
+```
+
+------------------------------------------------------------------------
+
+```{r}
+#| label: table-example-run
+#| echo: false
+
+library(gt)
+penguins |>
+  dplyr::select(1:4) |>
+  dplyr::slice(c(1:3, 201:203, 301:303)) |>
+  gt(caption = "表: ペンギンのデータ") |>
+  cols_label(species ~"Spcies",
+             island ~ "Island",
+             bill_len ~ "Bill length",
+             bill_dep ~ "Bill depth") |>
+  cols_units(starts_with("bill") ~ "mm",
+             .units_pattern = "{1} ({2})") |>
+  opt_stylize() |>
+  opt_table_font(size = 32)
 ```
 
 ## 数式
 
-インライン数式 `$`と`$`ではさむ
+- LaTeX記法で数式を記述できる
 
-`$\sqrt(x)$` = $\sqrt(x)$
+- 本文中に数式を含めるとき
 
-`$$` と `$$` に はさまれた行にLaTeX記法で数式を記述できる
+  - `$`と`$`の間に数式を記述: `$\sqrt{x}$` = $\sqrt{x}$
 
-$$\Pr(X=x \mid \lambda) = \frac{e^{-\lambda}\lambda^x}{x!}$$
+- 別立てで数式を含めるとき
 
-```         
+  - `$$` と `$$` に はさまれた行に数式を記述
+
+``` latex
 $$
 \Pr(X = x \mid x) = \frac{e^{-\lambda} \lambda^x}{x!}
 $$
 ```
 
+$$\Pr(X=x \mid \lambda) = \frac{e^{-\lambda}\lambda^x}{x!}$$
+
+## レンダリング
+
+- 結果の出力
+
+- RStudioの"⇒Render"ボタン
+
+- コマンドラインでも可能
+
+``` shell
+quarto render file_name.qmd
+```
+
 ## PDF出力
 
-左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力（ブラウザによってはずれるかもしれません）。
+Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力可能
+
+- （ブラウザによっては ずれるかもしれません。Chromeが推奨されています。）
 
 ## まとめ
+
+- Quartoをつかって
+
+  - データから結果まで一貫処理
+
+  - 再現可能性のある文書作成
+
+::: {style="text-align: center; font-size: 400%;"}
+🥳
+:::
