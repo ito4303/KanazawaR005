@@ -46,9 +46,7 @@ occ_info <- occ_download(pred("taxonKey", taxon_key),
 (meta <- occ_download_meta(occ_info))
 ```
 
-occ_download_wait()で準備を待つ
-
-occ_download_get()でデータを取得
+`occ_download_wait()`でダウンロード可能になるのを待つ。`occ_download_get()`でデータを取得。
 
 ダウンロードしたデータを読み込み
 
@@ -60,16 +58,21 @@ df <- occ_download_import(x)
 
 ## 国別
 
+countryCodeの頻度を表示。
+
 ```{r}
 df |>
   pull(countryCode) |>
   table()
 ```
 
+## 県別
+
+日本のデータを抽出し、都道府県(`stateProvince`)の頻度を表示
+
 ```{r}
 df_jp <- df |>
   dplyr::filter(countryCode == "JP")
-  
 df_jp |>
   pull(stateProvince) |>
   table()
