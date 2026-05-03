@@ -173,6 +173,7 @@ if (requireNamespace("tidyverse", quietly = TRUE)) {
   # 基本的にインストールは1回だけすればよい
   #（Rをバージョンアップしたら、再度必要な場合も）
   install.packages("tidyverse", dependencies = TRUE)
+  # install.packagesはパッケージをインストールする関数
 }
 
 # tidyverseパッケージを読み込む
@@ -247,12 +248,16 @@ Kion_long |>
 # パッケージをつかった例
 #
 
-# setariaviridisパッケージをインストールする
+# setariaviridisパッケージがインストールされていなければ
+# インストールする
 
-install.packages("setariaviridis") # install.packagesはパッケージを
-                                   # インストールする関数
 # setariaviridis は、エノコログサ(Setaria viridis)の測定データを収めた
 # パッケージ
+
+if (!requireNamespace("setariaviridis", quietly = TRUE)) {
+  install.packages("setariaviridis")
+}
+# '!'は、TRUE/FALSEを反転させる演算子
 
 library(setariaviridis) # library関数でパッケージを読み込む
 help(setariaviridis) # パッケージのヘルプを表示
@@ -346,8 +351,8 @@ p <- ggplot(data = setaria_viridis,
                      colour = factor(root_number))) +
   geom_point(size = 3) +  # 点のサイズを変える
   labs(title = "Setaria viridis",
-       x = "Culm length (cm)", y = "Panicle length (cm)") +
-  scale_colour_discrete(name = "Root number") # 凡例のタイトルを変更
+       x = "Culm length (cm)", y = "Panicle length (cm)",
+       colour = "Root number")
 
 # オブジェクトに保存しておいたものを表示
 
@@ -361,7 +366,11 @@ print(p)
 
 p
 
+# ラベルを日本語に
 # テーマとフォントを変更
 
 p +
-  theme_classic(base_family = "Noto Sans", base_size = 18)
+  labs(title = "エノコログサ",
+       x = "稈長 (cm)", y = "花序長 (cm)",
+       colour = "株番号") +
+  theme_classic(base_family = "YuGothic", base_size = 16)
