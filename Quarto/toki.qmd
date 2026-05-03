@@ -13,6 +13,16 @@ slide-number: true
 
 ## はじめに
 
+トキ放鳥
+
+## GBIF
+
+GBIF
+
+## 種のデータ取得
+
+トキの学名Nipponia nipponを指定してGBIFから種のデータを取得
+
 ```{r}
 #| label: setup
 
@@ -23,7 +33,9 @@ species_data <- name_backbone("Nipponia nippon")
 print(species_data)
 ```
 
-## GBIF
+## データを取得
+
+usageKeyを指定して、Occurrenceデータのダウンロード情報を取得
 
 ```{r}
 #| label: occ_download
@@ -34,11 +46,36 @@ occ_info <- occ_download(pred("taxonKey", taxon_key),
 (meta <- occ_download_meta(occ_info))
 ```
 
+occ_download_wait()で準備を待つ
+
+occ_download_get()でデータを取得
+
+ダウンロードしたデータを読み込み
+
 ```{r}
 occ_download_wait(occ_info)
 x <- occ_download_get(occ_info)
 df <- occ_download_import(x)
 ```
+
+## 国別
+
+```{r}
+df |>
+  pull(countryCode) |>
+  table()
+```
+
+```{r}
+df_jp <- df |>
+  dplyr::filter(countryCode == "JP")
+  
+df_jp |>
+  pull(stateProvince) |>
+  table()
+```
+
+## 地図表示
 
 leaflet
 
@@ -59,4 +96,3 @@ view
 ```{r}
 map
 ```
-
