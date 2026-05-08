@@ -13,54 +13,78 @@ slide-number: true
 
 ## はじめに
 
-石川県能登地域におけるトキ野生復帰のための放鳥が2026年5月31日に羽咋市においておこなわれます。以前、「[rgbifで、GBIFから日本のコウノトリの出現データを取得する](https://ito4303.sakura.ne.jp/posts/2023-12-25-rgbif-Ciconia_boyciana/)」という記事で、コウノトリの出現 (Occurrence) データをから取得し、地図で表示するということをやりましたが、今回はこれをトキでやってみようとおもいます。
+石川県能登地域におけるトキ野生復帰のための放鳥が2026年5月31日に羽咋市においておこなわれます。
+
+![トキ (© Marco Mussita https://www.inaturalist.org/photos/77371650)](https://inaturalist-open-data.s3.amazonaws.com/photos/77371650/medium.jpeg){fig-align="center"}
+
+## 本日の内容
+
+::: incremental
+- Kanazawa.R #1での発表「[Rで生物多様性情報を取得する](https://ito4303.github.io/KanazawaR001/rgbif.html)」では、コウノトリの出現 (Occurrence) 情報を地図にプロット
+
+- 今回は**トキ**
+
+- GBIFから出現データを取得
+
+- 内容を確認
+
+- 位置を地図表示
+:::
 
 ## GBIF
 
-GBIF [(Global Biodiversity Information Facility](https://www.gbif.org/)、じーびふ)
+- GBIF [(Global Biodiversity](https://www.gbif.org/)[Information](https://www.gbif.org/ja/)[Facility](https://www.gbif.org/)、じーびふ)
 
-## 種のデータ取得
+> GBIF－地球規模生物多様性情報機構は、地球上のあらゆる種類の生物に関するデータを誰でも、どこにでも、オープンアクセスで提供することを目的として、世界中の政府から資金提供されて設置された国際的なネットワークであり、データ基盤です。
 
-rgbifパッケージの`occ_download`関数でデータを取得するには、GBIFのアカウントが必要です。あらかじめ`~/.Renviron`ファイルに認証情報を書いておいておきました。この当たりも前回と同じです。詳細は以下のページで説明されています。
+::: {style="text-align: right; font-size: 90%;"}
+（[GBIFとは何か？](https://www.gbif.org/ja/what-is-gbif)）
+:::
 
-[Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
-
-トキの学名Nipponia nipponを指定してGBIFから種のデータを取得
-
-全体の流れは、[Getting Occurrence Data From GBIF](https://docs.ropensci.org/rgbif/articles/getting_occurrence_data.html) にて解説されています。
-
-まず、トキのtaxonKeyを調べます。トキの学名*Nipponia nippon*を指定してGBIFから種のデータを取得します。usageKeyがtaxonKeyです（ここは少々ややこしい）。
+- Rからは[rgbif](https://cran.r-project.org/package=rgbif)パッケージによりデータを取得できる
 
 ```{r}
 #| label: setup
 
 library(rgbif)
 library(leaflet)
+```
 
-species_data <- name_backbone("Nipponia nippon")
+## 種 (species) のデータ取得
+
+- rgbifパッケージの`name_backbone()`関数で、トキの学名*Nipponia nippon*を指定して種のデータを取得
+
+  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
+
+```{r}
+#| label: name_backbone
+
+species_data <- name_backbone("Nipponia nippon") # トキの学名
 species_data |>
   dplyr::select(scientificName, usageKey)
 ```
 
 ## ダウンロード情報の取得
 
-`occ_download`関数でダウンロードを要求します。引数の`pred`関数で`taxonKey`を指定します。occ_download_meta関数で、ダウンロードのメタデータを取得します。
+- `occ_download()`関数でダウンロードを要求
 
-usageKeyを指定して、Occurrenceデータのダウンロード情報を取得
+  - 引数の`pred`関数で`taxonKey`にトキのusageKeyを指定
+
+- `occ_download_meta()`関数で、ダウンロードのメタデータを取得
 
 ```{r}
 #| label: occ_download
+#| cache: true
 
-taxon_key <- species_data$usageKey
-occ_info <- occ_download(pred("taxonKey", taxon_key))
+occ_info <- occ_download(pred("taxonKey", species_data$usageKey))
 (meta <- occ_download_meta(occ_info))
 ```
 
-`occ_download_wait()`でダウンロード可能になるのを待つ。`occ_download_get()`でデータを取得。
+## ダウンロードしたデータを読み込み
 
-ダウンロードしたデータを読み込み
-
-では、データをダウンロードします。`occ_download_wait`関数で準備を待ち、`occ_download_get`関数でデータをダウンロードします。`occ_download_import`関数で、ダウンロードしたデータを読み込みます。
+1.  `occ_download_wait()`でダウンロード可能になるのを待つ
+2.  `occ_download_get()`でデータをダウンロード
+3.  `occ_download_import`関数で、ダウンロードしたデータを読み込みむ
 
 ```{r}
 #| label: gbif_download_get
@@ -73,7 +97,16 @@ df <- occ_download_import(x)
 
 ## データの確認
 
-データを確認します。データはDarwin Core形式になっています。
+データを確認します。データは[Darwin Core](https://gbif.jp/datause/dataformat/)形式になっています。
+
+```{r}
+#| label: view-data
+
+
+
+```
+
+## 国の頻度分布
 
 まずはトキの出現情報のある国の頻度分布をみてみます。`countryCode`はアルファベット2文字の国コードです。
 
@@ -98,19 +131,9 @@ df |>
                 institutionCode)
 ```
 
-パプアニューギニアの方は"PRESERVED_SPECIMEN"ということですので、標本のある場所が登録されているように思われます。ナイジェリアの方は人による観察ということですので、やはり謎です。`issue`（問題）をみてみます。
+パプアニューギニアの方は"PRESERVED_SPECIMEN"ということですので、標本のある場所が登録されているように思われます。ナイジェリアの方は人による観察ということですので、やはり謎です。
 
-```{r}
-#| label: country-NG-issue
-
-df |>
-  dplyr::filter(countryCode == "NG") |>
-  dplyr::pull(issue)
-```
-
-座標系はWGS84を仮定した、記録と同定の日付が無効とありますが、謎は残ります。
-
-しかしまあ、観察記録にはこのような何らかの誤りによるものが含まれることはあります。このようなデータを注意深く取り除くことも必要になります。
+観察記録にはこのような何らかの誤りによるものが含まれることはあります。このようなデータを注意深く取り除くことも必要になります。
 
 ## 日本国内データの都道府県の頻度分布
 
@@ -177,7 +200,7 @@ df_loc <- df |>
                 !is.na(decimalLongitude))
 ```
 
-## 東アジア
+## 東アジアにおけるトキの観察場所
 
 ```{r}
 #| label: map-asia
@@ -192,7 +215,7 @@ map_asia <- leaflet(df_loc) |>
                    radius = 2)
 ```
 
-## 日本国内
+## 日本国内におけるトキの観察場所
 
 ```{r}
 #| label: map-japan
