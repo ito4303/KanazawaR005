@@ -31,9 +31,9 @@ slide-number: true
 - 位置を地図表示
 :::
 
-## GBIF
+## GBIFとは
 
-- GBIF [(Global Biodiversity](https://www.gbif.org/)[Information](https://www.gbif.org/ja/)[Facility](https://www.gbif.org/)、じーびふ)
+- GBIF [(Global Biodiversity](https://www.gbif.org/) [Information](https://www.gbif.org/ja/) [Facility](https://www.gbif.org/)、じーびふ)
 
 > GBIF－地球規模生物多様性情報機構は、地球上のあらゆる種類の生物に関するデータを誰でも、どこにでも、オープンアクセスで提供することを目的として、世界中の政府から資金提供されて設置された国際的なネットワークであり、データ基盤です。
 
@@ -45,9 +45,9 @@ slide-number: true
 
 ```{r}
 #| label: setup
+#| output: false
 
 library(rgbif)
-library(leaflet)
 ```
 
 ## 種 (species) のデータ取得
@@ -97,7 +97,7 @@ df <- occ_download_import(x)
 
 ## データの確認
 
-データを確認します。データは[Darwin Core](https://gbif.jp/datause/dataformat/)形式になっています。たくさんの変数があるので、`eventDate`, `countryCode`, `locality`にしぼります。
+データを確認。[Darwin Core](https://gbif.jp/datause/dataformat/)形式で、たくさんの変数があるので、`eventDate`（イベント発生の日時もしくは間隔）, `countryCode`（国コード）, `locality`（標本採取地・観測地の説明）にしぼって表示
 
 ```{r}
 #| label: view-data
@@ -107,9 +107,9 @@ df |>
   DT::datatable()
 ```
 
-## 国の頻度分布
+## 国別の頻度分布
 
-まずはトキの出現情報のある国の頻度分布をみてみます。`countryCode`はアルファベット2文字の国コードです。
+トキの出現情報のある国の頻度分布を表示
 
 ```{r}
 #| label: country
@@ -121,22 +121,11 @@ df |>
 
 やはり中国(CN)が多いのですが、NG（ナイジェリア）やPG（パプアニューギニア）というデータもあります。このあたりに出現情報があるのはなんだか変なので、ちょっとデータをみてみます。
 
-`countryCode`, `basisOfRecord`（データレコードの種類）, `eventDate`（イベント発生の日時もしくは間隔）, `locality`（標本採取地・観測地の説明）, `institutionID`（研究機関コード）を抽出します。なお、ダーウィンコア項目名の日本語訳は[JBIFのダーウィンコア最新版](https://gbif.jp/datause/dataformat/)によります。
-
-```{r}
-#| label: country-NG-and-PG
-
-df |>
-  dplyr::filter(countryCode %in% c("NG", "PG")) |>
-  dplyr::select(countryCode, basisOfRecord, eventDate, locality,
-                institutionCode)
-```
-
 パプアニューギニアの方は"PRESERVED_SPECIMEN"ということですので、標本のある場所が登録されているように思われます。ナイジェリアの方は人による観察ということですので、やはり謎です。
 
 観察記録にはこのような何らかの誤りによるものが含まれることはあります。このようなデータを注意深く取り除くことも必要になります。
 
-## 日本国内データの都道府県の頻度分布
+## 日本国内データの都道府県別の頻度分布
 
 ```{r}
 #| label: Japan-prefs
@@ -149,7 +138,7 @@ df |>
 
 新潟がほとんどですが、北海道と石川県もあります。
 
-北海道のデータを見てみます。
+## 北海道のデータを確認
 
 ```{r}
 #| label: data-hokkaido
@@ -189,7 +178,7 @@ eBirdのデータには観察場所の記述があり、輪島市と羽咋市で
 
 ## 地図表示
 
-トキ生息地を地図表示します。このため、ダウンロードしたデータから、観察データで観察場所が中国・日本・韓国・台湾であるもので、かつ緯度経度座標のあるものを抽出します。
+トキ生息地を地図表示するため、ダウンロードしたデータから、観察国が中国・日本・韓国・台湾であるもので、かつ緯度経度座標のあるものを抽出する
 
 ```{r}
 #| label: filter-loca
@@ -207,13 +196,12 @@ df_loc <- df |>
 #| label: map-asia
 #| message: false
 
+library(leaflet)
 map_asia <- leaflet(df_loc) |>
   addTiles() |>
   setView(lng = 125, lat = 35, zoom = 4) |>
-  addCircleMarkers(~decimalLongitude,
-                   ~decimalLatitude,
-                   color = "red",
-                   radius = 2)
+  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
+                   color = "red", radius = 2)
 ```
 
 ## 日本国内におけるトキの観察場所
@@ -227,8 +215,6 @@ map_japan <- df_loc |>
   leaflet() |>
   addTiles() |>
   setView(lng = 137.5, lat = 37.5, zoom = 7) |>
-  addCircleMarkers(~decimalLongitude,
-                   ~decimalLatitude,
-                   color = "red",
-                   radius = 2)
+  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
+                   color = "red", radius = 2)
 ```
