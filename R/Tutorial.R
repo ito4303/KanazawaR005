@@ -127,9 +127,24 @@ while(z > 0) {
   print(z)
 }
 
-# Rでは、ループは制御フローを使うより関数を使ってベクトルとして
-# 処理する方が効率的
-# -> apply系関数やpurrrパッケージ
+# Rでは、ループを使うよりベクトルとして処理する方が効率的
+# 例 ベクトルの要素それぞれに1をたす
+
+a <- seq(0, 1, by = 0.1) # 0から1まで0.1きざみベクトルを生成
+a
+
+b <- c()                 # 空のベクトルを生成
+for (i in seq_along(a))  # seq_along()はベクトルのインデックスを返す
+  b[i] <- a[i] + 1
+b
+
+# ベクトルで処理する
+
+rm("b")  # いったんbを消去
+b <- a + 1
+b
+
+# もっと複雑な場合にはapply系関数やpurrrパッケージの関数
 # 今回は説明しません
 
 
@@ -139,8 +154,7 @@ while(z > 0) {
 
 set.seed(123) # 擬似乱数の固定
 
-# 平均0、標準偏差1の正規分布にしたがう乱数を
-# 100個生成
+# 平均0、標準偏差1の正規分布にしたがう乱数を100個生成
 # rnorm()は正規乱数を生成する関数
 
 x <- rnorm(100, mean = 0, sd = 1)
@@ -159,10 +173,24 @@ quantile(x) # 四分位数
 # パッケージの利用とTidy data
 #
 
-# tidyverseパッケージをインストールする（依存パッケージもまとめてインストールする）
-# 1回だけすればよい（Rをバージョンアップしたら、再度必要な場合も）
+# tidyverseパッケージがインストールされているか
+# チェックする
+# ※これは通常はしなくてよい
 
-install.packages("tidyverse", dependencies = TRUE)
+if (requireNamespace("tidyverse", quietly = TRUE)) {
+  # requireNamespace()は、パッケージがインストール
+  # されているかどうかを返す関数
+  
+  # tidyverseパッケージがインストールされているとき
+  print("tidyverseがインストールされています")
+} else {
+  # tidyverseパッケージをインストールされていなければインストールする
+  # （依存パッケージもまとめてインストールする）
+  # 基本的にインストールは1回だけすればよい
+  #（Rをバージョンアップしたら、再度必要な場合も）
+  install.packages("tidyverse", dependencies = TRUE)
+  # install.packagesはパッケージをインストールする関数
+}
 
 # tidyverseパッケージを読み込む
 
@@ -172,22 +200,28 @@ library(tidyverse)
 
 # スライド資料の気温データをファイルにしておきました
 
-file_path <- file.path("data", "kion.tsv") # file.path()はファイルパスを作る関数
+file_path <- file.path("data", "kion.tsv")
+             # file.path()はファイルパスを作る関数
 
 # ファイルを読み込む
 
-Kion <- readr::read_tsv(file_path) # read_tsv()はタブ区切りのデータを読み込む関数
+Kion <- readr::read_tsv(file_path)
+        # read_tsv()はタブ区切りのデータを読み込む関数
 Kion # 読み込んだデータを表示
 
 # Tidy dataに変換
 # pivot_longer()は、tidyrパッケージの関数で、データを縦長に変換する
 
 Kion_long <- Kion |>
-  pivot_longer(cols = starts_with(c("max", "min")), # "max"または"min"で始まる列を
-                                                    # 変換の対象とする
-               names_to = c("item", "date"),        # 変換した列の名前を"item"と"date"にする
-               names_sep = "_",                     # 列名中の"_"を区切り文字とする
-               values_to = "temperature")           # 値の列名を"temperature"にする
+  pivot_longer(cols = starts_with(c("max", "min")),
+               # "max"または"min"で始まる列を
+               # 変換の対象とする
+               names_to = c("item", "date"),
+               # 変換した列の名前を"item"と"date"にする
+               names_sep = "_",
+               # 列名中の"_"を区切り文字とする
+               values_to = "temperature")
+               # 値の列名を"temperature"にする
 
 Kion_long # 変換したデータを表示
 
@@ -195,8 +229,10 @@ Kion_long # 変換したデータを表示
 # pivot_wider()は、tidyrパッケージの関数で、データを横長に変換する
 
 Kion_long |>
-  pivot_wider(names_from = "item",         # "item"列の内容を新しい列の名前に
-              values_from = "temperature") # "temperature"列の内容を新しい列の値に
+  pivot_wider(names_from = "item",
+              # "item"列の内容を新しい列の名前に
+              values_from = "temperature")
+              # "temperature"列の内容を新しい列の値に
 
 # "|>"はパイプ演算子と呼ばれ、左側の式の値を右側の関数の第1引数として渡すもの
 # magrittrパッケージの %>% も（だいたい）同じ
@@ -218,19 +254,26 @@ X |>
 # 縦長にしたデータをもとにもどす
 
 Kion_long |>
-  pivot_wider(names_from = c("item", "date"), # "item"と"date"列の内容を新しい列の名前に
-              values_from = "temperature")    # "temperature"列の内容を新しい列の値に
+  pivot_wider(names_from = c("item", "date"),
+              # "item"と"date"列の内容を新しい列の名前に
+              values_from = "temperature")
+              # "temperature"列の内容を新しい列の値に
 
 
 #
 # パッケージをつかった例
 #
 
-# setariaviridisパッケージをインストールする
+# setariaviridisパッケージがインストールされていなければ
+# インストールする
 
-install.packages("setariaviridis") # install.packagesはパッケージを
-                                   # インストールする関数
-# setariaviridis は、エノコログサ(Setaria viridis)の測定データを収めたパッケージ
+# setariaviridis は、エノコログサ(Setaria viridis)の測定データを収めた
+# パッケージ
+
+if (!requireNamespace("setariaviridis", quietly = TRUE)) {
+  install.packages("setariaviridis")
+}
+# '!'は、TRUE/FALSEを反転させる演算子
 
 library(setariaviridis) # library関数でパッケージを読み込む
 help(setariaviridis) # パッケージのヘルプを表示
@@ -324,8 +367,8 @@ p <- ggplot(data = setaria_viridis,
                      colour = factor(root_number))) +
   geom_point(size = 3) +  # 点のサイズを変える
   labs(title = "Setaria viridis",
-       x = "Culm length (cm)", y = "Panicle length (cm)") +
-  scale_colour_discrete(name = "Root number") # 凡例のタイトルを変更
+       x = "Culm length (cm)", y = "Panicle length (cm)",
+       colour = "Root number")
 
 # オブジェクトに保存しておいたものを表示
 
@@ -339,7 +382,11 @@ print(p)
 
 p
 
+# ラベルを日本語に
 # テーマとフォントを変更
 
 p +
-  theme_classic(base_family = "Noto Sans", base_size = 18)
+  labs(title = "エノコログサ",
+       x = "稈長 (cm)", y = "花序長 (cm)",
+       colour = "株番号") +
+  theme_classic(base_family = "YuGothic", base_size = 16)

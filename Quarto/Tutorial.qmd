@@ -57,7 +57,7 @@ format:
 
 - R MarkdownやQuartoによる文書作成
 
-- 2026.04版から[Posit AI](https://posit.co/products/ai)を統合
+- 2026.04版から[Posit AI](https://posit.co/products/ai)を統合（Posit AssistantとNext Edit Suggestions）
 
 - ダウンロード: <https://posit.co/download/rstudio-desktop/>
 
