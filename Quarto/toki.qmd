@@ -13,86 +13,208 @@ slide-number: true
 
 ## はじめに
 
-トキ放鳥
+石川県能登地域におけるトキ野生復帰のための放鳥が2026年5月31日に羽咋市においておこなわれます。
 
-## GBIF
+![トキ (© Marco Mussita https://www.inaturalist.org/photos/77371650)](https://inaturalist-open-data.s3.amazonaws.com/photos/77371650/medium.jpeg){fig-align="center"}
 
-GBIF
+## 本日の内容
 
-## 種のデータ取得
+::: incremental
+- Kanazawa.R #1での発表「[Rで生物多様性情報を取得する](https://ito4303.github.io/KanazawaR001/rgbif.html)」では、コウノトリの出現 (Occurrence) 情報を地図にプロット
 
-トキの学名Nipponia nipponを指定してGBIFから種のデータを取得
+- 今回は**トキ**
+
+- GBIFから出現データを取得
+
+- 内容を確認
+
+- 位置を地図表示
+:::
+
+## GBIFとは
+
+- GBIF [(Global Biodiversity](https://www.gbif.org/) [Information](https://www.gbif.org/ja/) [Facility](https://www.gbif.org/)、じーびふ)
+
+> GBIF－地球規模生物多様性情報機構は、地球上のあらゆる種類の生物に関するデータを誰でも、どこにでも、オープンアクセスで提供することを目的として、世界中の政府から資金提供されて設置された国際的なネットワークであり、データ基盤です。
+
+::: {style="text-align: right; font-size: 90%;"}
+（[GBIFとは何か？](https://www.gbif.org/ja/what-is-gbif)）
+:::
+
+- Rからは[rgbif](https://cran.r-project.org/package=rgbif)パッケージによりデータを取得できる
 
 ```{r}
 #| label: setup
+#| output: false
 
-library(tidyverse)
 library(rgbif)
-
-species_data <- name_backbone("Nipponia nippon")
-print(species_data)
 ```
 
-## データを取得
+## 種 (species) のデータ取得
 
-usageKeyを指定して、Occurrenceデータのダウンロード情報を取得
+- rgbifパッケージの`name_backbone()`関数で、トキの学名*Nipponia nippon*を指定して種のデータを取得
+
+  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
+
+```{r}
+#| label: name_backbone
+
+species_data <- name_backbone("Nipponia nippon") # トキの学名
+species_data |>
+  dplyr::select(scientificName, usageKey)
+```
+
+## ダウンロード情報の取得
+
+- `occ_download()`関数でダウンロードを要求
+
+  - 引数の`pred`関数で`taxonKey`にトキのusageKeyを指定
+
+- `occ_download_meta()`関数で、ダウンロードのメタデータを取得
 
 ```{r}
 #| label: occ_download
+#| cache: true
 
-taxon_key <- species_data$usageKey
-occ_info <- occ_download(pred("taxonKey", taxon_key),
-                         pred("hasCoordinate", TRUE))
+occ_info <- occ_download(pred("taxonKey", species_data$usageKey))
 (meta <- occ_download_meta(occ_info))
 ```
 
-occ_download_wait()で準備を待つ
+## ダウンロードしたデータを読み込み
 
-occ_download_get()でデータを取得
-
-ダウンロードしたデータを読み込み
+1.  `occ_download_wait()`でダウンロード可能になるのを待つ
+2.  `occ_download_get()`でデータをダウンロード
+3.  `occ_download_import`関数で、ダウンロードしたデータを読み込みむ
 
 ```{r}
+#| label: gbif_download_get
+#| cache: true
+
 occ_download_wait(occ_info)
 x <- occ_download_get(occ_info)
 df <- occ_download_import(x)
 ```
 
-## 国別
+## データの確認
+
+データを確認。[Darwin Core](https://gbif.jp/datause/dataformat/)形式で、たくさんの変数があるので、`eventDate`（イベント発生の日時もしくは間隔）, `countryCode`（国コード）, `locality`（標本採取地・観測地の説明）にしぼって表示
 
 ```{r}
+#| label: view-data
+
 df |>
-  pull(countryCode) |>
+  dplyr::select(eventDate, countryCode, locality) |>
+  DT::datatable()
+```
+
+## 国別の頻度分布
+
+トキの出現情報のある国の頻度分布を表示
+
+```{r}
+#| label: country
+
+df |>
+  dplyr::pull(countryCode) |>
   table()
 ```
 
+やはり中国(CN)が多いのですが、NG（ナイジェリア）やPG（パプアニューギニア）というデータもあります。このあたりに出現情報があるのはなんだか変なので、ちょっとデータをみてみます。
+
+パプアニューギニアの方は"PRESERVED_SPECIMEN"ということですので、標本のある場所が登録されているように思われます。ナイジェリアの方は人による観察ということですので、やはり謎です。
+
+観察記録にはこのような何らかの誤りによるものが含まれることはあります。このようなデータを注意深く取り除くことも必要になります。
+
+## 日本国内データの都道府県別の頻度分布
+
 ```{r}
-df_jp <- df |>
-  dplyr::filter(countryCode == "JP")
-  
-df_jp |>
-  pull(stateProvince) |>
+#| label: Japan-prefs
+
+df |>
+  dplyr::filter(countryCode == "JP") |>
+  dplyr::pull(stateProvince) |>
   table()
 ```
+
+新潟がほとんどですが、北海道と石川県もあります。
+
+## 北海道のデータを確認
+
+```{r}
+#| label: data-hokkaido
+
+df |>
+  dplyr::filter(countryCode == "JP", stateProvince == "Hokkaido") |>
+  dplyr::select(basisOfRecord, institutionCode,
+                eventDate, locality)
+```
+
+いずれも標本です。`institutionCode`のHUNHMは、北海道大学農学部博物館、NHMUKはロンドン自然史博物館のようです。HUNHMのものは19世紀ということで、このころにはまだ北海道にもトキが分布していたようです。標本採集地(`locality`)もすべて函館となっています。
+
+つづいて、石川県のデータを見てみます。
+
+```{r}
+#| label: data-ishikawa
+
+df |>
+  dplyr::filter(countryCode == "JP", stateProvince == "Ishikawa") |>
+  dplyr::select(basisOfRecord, institutionCode, collectionCode,
+                eventDate)
+```
+
+いずれも観察データです。1番上がiNaturalist、その他はeBirdによる記録です。
+
+場所を確認してみます。
+
+```{r}
+#| label: data-ishikawa-locality
+
+df |>
+  dplyr::filter(countryCode == "JP", stateProvince == "Ishikawa") |>
+  dplyr::select(county, locality)
+```
+
+eBirdのデータには観察場所の記述があり、輪島市と羽咋市でした。佐渡のトキが能登まで渡ってきて、また帰っていったことがあるとききますので、そのようなときに観察された記録でしょう。
 
 ## 地図表示
 
-leaflet
+トキ生息地を地図表示するため、ダウンロードしたデータから、観察国が中国・日本・韓国・台湾であるもので、かつ緯度経度座標のあるものを抽出する
 
 ```{r}
-library(leaflet)
+#| label: filter-loca
 
-map <- leaflet() |>
-  addTiles() |>
-  setView(lng = 125, lat = 35, zoom = 4) |>
-  addCircleMarkers(lng = df$decimalLongitude,
-                   lat = df$decimalLatitude,
-                   color = "red",
-                   radius = 3)
+df_loc <- df |>
+  dplyr::filter(basisOfRecord == "HUMAN_OBSERVATION",
+                countryCode %in% c("CN", "JP", "KR", "TW"),
+                !is.na(decimalLatitude),
+                !is.na(decimalLongitude))
 ```
 
-view
+## 東アジアにおけるトキの観察場所
 
 ```{r}
-map
+#| label: map-asia
+#| message: false
+
+library(leaflet)
+map_asia <- leaflet(df_loc) |>
+  addTiles() |>
+  setView(lng = 125, lat = 35, zoom = 4) |>
+  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
+                   color = "red", radius = 2)
+```
+
+## 日本国内におけるトキの観察場所
+
+```{r}
+#| label: map-japan
+#| message: false
+
+map_japan <- df_loc |>
+  dplyr::filter(countryCode == "JP") |>
+  leaflet() |>
+  addTiles() |>
+  setView(lng = 137.5, lat = 37.5, zoom = 7) |>
+  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
+                   color = "red", radius = 2)
 ```
