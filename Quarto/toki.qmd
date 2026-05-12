@@ -97,15 +97,40 @@ df <- occ_download_import(x)
 
 ## データの確認
 
-データを確認。[Darwin Core](https://gbif.jp/datause/dataformat/)形式で、たくさんの変数があるので、`eventDate`（イベント発生の日時もしくは間隔）, `countryCode`（国コード）, `locality`（標本採取地・観測地の説明）にしぼって表示
+[Darwin Core](https://gbif.jp/datause/dataformat/)形式で、たくさんの変数があるので、変数をしぼって表示
 
 ```{r}
 #| label: view-data
+#| echo: true
+#| eval: false
 
 df |>
   dplyr::select(eventDate, countryCode, locality) |>
   DT::datatable()
 ```
+
+------------------------------------------------------------------------
+
+```{r}
+#| label: view-data-run
+#| echo: false
+
+df |>
+  dplyr::select(eventDate, countryCode, locality) |>
+  DT::datatable(
+    options = list(
+      initComplete = DT::JS(
+        "function(settings, json) {",
+        "$(this.api().table().container()).css({'font-size': '18px'});",
+        "}"
+      )
+    )
+  )
+```
+
+::: {style="font-size: 70%;"}
+（フォントサイズを調整しています）
+:::
 
 ## 国別の頻度分布
 
@@ -119,11 +144,9 @@ df |>
   table()
 ```
 
-やはり中国(CN)が多いのですが、NG（ナイジェリア）やPG（パプアニューギニア）というデータもあります。このあたりに出現情報があるのはなんだか変なので、ちょっとデータをみてみます。
-
-パプアニューギニアの方は"PRESERVED_SPECIMEN"ということですので、標本のある場所が登録されているように思われます。ナイジェリアの方は人による観察ということですので、やはり謎です。
-
-観察記録にはこのような何らかの誤りによるものが含まれることはあります。このようなデータを注意深く取り除くことも必要になります。
+- やはり中国(CN)が多い
+- NG（ナイジェリア）やPG（パプアニューギニア）というデータもあります。このあたりに出現情報があるのはなんだか変
+  - 何かの間違いらしい
 
 ## 日本国内データの都道府県別の頻度分布
 
@@ -136,22 +159,7 @@ df |>
   table()
 ```
 
-新潟がほとんどですが、北海道と石川県もあります。
-
-## 北海道のデータを確認
-
-```{r}
-#| label: data-hokkaido
-
-df |>
-  dplyr::filter(countryCode == "JP", stateProvince == "Hokkaido") |>
-  dplyr::select(basisOfRecord, institutionCode,
-                eventDate, locality)
-```
-
-いずれも標本です。`institutionCode`のHUNHMは、北海道大学農学部博物館、NHMUKはロンドン自然史博物館のようです。HUNHMのものは19世紀ということで、このころにはまだ北海道にもトキが分布していたようです。標本採集地(`locality`)もすべて函館となっています。
-
-つづいて、石川県のデータを見てみます。
+## 石川県のデータを確認
 
 ```{r}
 #| label: data-ishikawa
@@ -162,9 +170,7 @@ df |>
                 eventDate)
 ```
 
-いずれも観察データです。1番上がiNaturalist、その他はeBirdによる記録です。
-
-場所を確認してみます。
+## 場所を確認
 
 ```{r}
 #| label: data-ishikawa-locality
@@ -173,8 +179,6 @@ df |>
   dplyr::filter(countryCode == "JP", stateProvince == "Ishikawa") |>
   dplyr::select(county, locality)
 ```
-
-eBirdのデータには観察場所の記述があり、輪島市と羽咋市でした。佐渡のトキが能登まで渡ってきて、また帰っていったことがあるとききますので、そのようなときに観察された記録でしょう。
 
 ## 地図表示
 
@@ -197,7 +201,7 @@ df_loc <- df |>
 #| message: false
 
 library(leaflet)
-map_asia <- leaflet(df_loc) |>
+leaflet(df_loc) |>
   addTiles() |>
   setView(lng = 125, lat = 35, zoom = 4) |>
   addCircleMarkers(~decimalLongitude, ~decimalLatitude,
@@ -210,7 +214,7 @@ map_asia <- leaflet(df_loc) |>
 #| label: map-japan
 #| message: false
 
-map_japan <- df_loc |>
+df_loc |>
   dplyr::filter(countryCode == "JP") |>
   leaflet() |>
   addTiles() |>
