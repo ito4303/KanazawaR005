@@ -13,7 +13,7 @@ slide-number: true
 
 ## はじめに
 
-石川県能登地域におけるトキ野生復帰のための放鳥が2026年5月31日に羽咋市においておこなわれます。
+2026年5月31日、羽咋市においてトキ野生復帰（石川県能登地域）の放鳥が実施されます
 
 ![トキ (© Marco Mussita https://www.inaturalist.org/photos/77371650)](https://inaturalist-open-data.s3.amazonaws.com/photos/77371650/medium.jpeg){fig-align="center"}
 
@@ -22,7 +22,7 @@ slide-number: true
 ::: incremental
 - Kanazawa.R #1での発表「[Rで生物多様性情報を取得する](https://ito4303.github.io/KanazawaR001/rgbif.html)」では、コウノトリの出現 (Occurrence) 情報を地図にプロット
 
-- 今回は**トキ**
+- 今回は[**トキ**]{style="color: red;"}
 
 - GBIFから出現データを取得
 
@@ -35,17 +35,27 @@ slide-number: true
 
 - GBIF [(Global Biodiversity](https://www.gbif.org/) [Information](https://www.gbif.org/ja/) [Facility](https://www.gbif.org/)、じーびふ)
 
+::: {style="font-size: 85%;"}
 > GBIF－地球規模生物多様性情報機構は、地球上のあらゆる種類の生物に関するデータを誰でも、どこにでも、オープンアクセスで提供することを目的として、世界中の政府から資金提供されて設置された国際的なネットワークであり、データ基盤です。
+:::
 
-::: {style="text-align: right; font-size: 90%;"}
+::: {style="text-align: right; font-size: 85%;"}
 （[GBIFとは何か？](https://www.gbif.org/ja/what-is-gbif)）
 :::
 
+## rgbifパッケージ
+
 - Rからは[rgbif](https://cran.r-project.org/package=rgbif)パッケージによりデータを取得できる
+
+- 処理の流れ
+
+  1.  種 (species) データの取得
+
+  2.  種を条件に指定して、出現（occurrence) データをダウンロード
 
 ```{r}
 #| label: setup
-#| output: false
+#| echo: false
 
 library(rgbif)
 ```
@@ -54,10 +64,11 @@ library(rgbif)
 
 - rgbifパッケージの`name_backbone()`関数で、トキの学名*Nipponia nippon*を指定して種のデータを取得
 
-  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
+  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
 
 ```{r}
 #| label: name_backbone
+#| echo: true
 
 species_data <- name_backbone("Nipponia nippon") # トキの学名
 species_data |>
@@ -67,17 +78,15 @@ species_data |>
 ## ダウンロード情報の取得
 
 - `occ_download()`関数でダウンロードを要求
-
-  - 引数の`pred`関数で`taxonKey`にトキのusageKeyを指定
-
-- `occ_download_meta()`関数で、ダウンロードのメタデータを取得
+  - `pred()`関数で`taxonKey`にトキのusageKeyを指定
 
 ```{r}
 #| label: occ_download
-#| cache: true
+#| echo: true
+#| eval: false
 
-occ_info <- occ_download(pred("taxonKey", species_data$usageKey))
-(meta <- occ_download_meta(occ_info))
+occ_info <- occ_download(pred("taxonKey",
+                              species_data$usageKey))
 ```
 
 ## ダウンロードしたデータを読み込み
@@ -88,28 +97,26 @@ occ_info <- occ_download(pred("taxonKey", species_data$usageKey))
 
 ```{r}
 #| label: gbif_download_get
-#| cache: true
+#| echo: true
+#| eval: false
 
 occ_download_wait(occ_info)
 x <- occ_download_get(occ_info)
 df <- occ_download_import(x)
 ```
 
-## データの確認
-
-[Darwin Core](https://gbif.jp/datause/dataformat/)形式で、たくさんの変数があるので、変数をしぼって表示
-
 ```{r}
-#| label: view-data
-#| echo: true
-#| eval: false
+#| label: gbif_download_import
+#| echo: false
 
-df |>
-  dplyr::select(eventDate, countryCode, locality) |>
-  DT::datatable()
+# 2回目以降はダウンロード済みのファイルがあるのでそちらを読み込む
+download_file <- "0012446-260507073636908.zip"
+df <- occ_download_import(as.download(download_file))
 ```
 
-------------------------------------------------------------------------
+## データの確認
+
+[Darwin Core](https://gbif.jp/datause/dataformat/)形式。特定の変数のみ表示。
 
 ```{r}
 #| label: view-data-run
@@ -119,6 +126,7 @@ df |>
   dplyr::select(eventDate, countryCode, locality) |>
   DT::datatable(
     options = list(
+      # フォントの調整
       initComplete = DT::JS(
         "function(settings, json) {",
         "$(this.api().table().container()).css({'font-size': '18px'});",
@@ -127,10 +135,6 @@ df |>
     )
   )
 ```
-
-::: {style="font-size: 70%;"}
-（フォントサイズを調整しています）
-:::
 
 ## 国別の頻度分布
 
@@ -145,80 +149,48 @@ df |>
 ```
 
 - やはり中国(CN)が多い
-- NG（ナイジェリア）やPG（パプアニューギニア）というデータもあります。このあたりに出現情報があるのはなんだか変
-  - 何かの間違いらしい
+- NG（ナイジェリア）やPG（パプアニューギニア）というデータも。
+  - 何かの間違いらしい。
 
-## 日本国内データの都道府県別の頻度分布
+## 地図データの準備
 
-```{r}
-#| label: Japan-prefs
-
-df |>
-  dplyr::filter(countryCode == "JP") |>
-  dplyr::pull(stateProvince) |>
-  table()
-```
-
-## 石川県のデータを確認
+- データから、観察データかつ観察国が中国・日本・韓国・台湾であるものを残し、緯度経度座標のないものを除外
 
 ```{r}
-#| label: data-ishikawa
-
-df |>
-  dplyr::filter(countryCode == "JP", stateProvince == "Ishikawa") |>
-  dplyr::select(basisOfRecord, institutionCode, collectionCode,
-                eventDate)
-```
-
-## 場所を確認
-
-```{r}
-#| label: data-ishikawa-locality
-
-df |>
-  dplyr::filter(countryCode == "JP", stateProvince == "Ishikawa") |>
-  dplyr::select(county, locality)
-```
-
-## 地図表示
-
-トキ生息地を地図表示するため、ダウンロードしたデータから、観察国が中国・日本・韓国・台湾であるもので、かつ緯度経度座標のあるものを抽出する
-
-```{r}
-#| label: filter-loca
+#| label: filter-location
+#| echo: true
 
 df_loc <- df |>
   dplyr::filter(basisOfRecord == "HUMAN_OBSERVATION",
-                countryCode %in% c("CN", "JP", "KR", "TW"),
-                !is.na(decimalLatitude),
-                !is.na(decimalLongitude))
+                countryCode %in% c("CN", "JP", "KR", "TW")) |>
+  dplyr::filter_out(is.na(decimalLatitude) |
+                    is.na(decimalLongitude))
+  # filter_out は dplyr 1.2.0以降
+```
+
+## 地図の生成
+
+- 地図表示のためleafletパッケージを使用
+
+```{r}
+#| label: map-asia
+#| echo: true
+#| message: false
+
+library(leaflet)
+labs <- paste(htmltools::htmlEscape(df_loc$eventDate),
+              "<br />",
+              htmltools::htmlEscape(df_loc$locality))
+toki_map <- leaflet(df_loc) |>
+  addTiles() |>
+  setView(lng = 125, lat = 35, zoom = 4) |>
+  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
+                   color = "red", radius = 2,
+                   popup = labs)
 ```
 
 ## 東アジアにおけるトキの観察場所
 
 ```{r}
-#| label: map-asia
-#| message: false
-
-library(leaflet)
-leaflet(df_loc) |>
-  addTiles() |>
-  setView(lng = 125, lat = 35, zoom = 4) |>
-  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
-                   color = "red", radius = 2)
-```
-
-## 日本国内におけるトキの観察場所
-
-```{r}
-#| label: map-japan
-#| message: false
-
-df_loc |>
-  dplyr::filter(countryCode == "JP") |>
-  leaflet() |>
-  addTiles() |>
-  setView(lng = 137.5, lat = 37.5, zoom = 7) |>
-  addCircleMarkers(~decimalLongitude, ~decimalLatitude,
-                   color = "red", radius = 2)
+toki_map
 ```
