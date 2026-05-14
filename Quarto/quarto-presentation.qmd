@@ -5,6 +5,7 @@ date: 2026-05-30
 lang: ja
 format:
   revealjs:
+    theme: [default, custom.scss]
     embed-resources: true
     slide-number: true
 ---
@@ -37,7 +38,7 @@ format:
 
 ## こうしたい
 
-::: incremental
+::: {.incremental style="margin-top: 2em; font-size: 150%;"}
 - データから結果（グラフ含む）まで一貫処理
 
 - QuartoとRで できます
@@ -74,7 +75,7 @@ Reveal JSとKnitrを使用
 
 プレゼンテーションなら
 
-```         
+``` {.yaml style="margin: 1px solid grey;"}
 ---
 title: Quartoで、コピペミスしないプレゼンテーション資料作成
 author: 伊東宏樹
@@ -84,7 +85,7 @@ format: revealjs
 ---
 ```
 
-`format: revealjs`で、[reveal.js](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
+`format: revealjs`で、[Reveal JS](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
 
 ## 見出し
 
