@@ -1,5 +1,5 @@
 ---
-title: "トキの分布をしらべる"
+title: "<br />トキの分布をしらべる<br />&nbsp;<br />&nbsp;"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
@@ -7,6 +7,7 @@ format:
   revealjs:
     theme: [default, custom.scss]
     code-copy: true
+    center-title-slide: false
 embed-resources: true
 slide-number: true
 ---
@@ -60,11 +61,11 @@ slide-number: true
 library(rgbif)
 ```
 
-## 種 (species) のデータ取得
+## 種 (species) のデータ取得 {.r-output}
 
 - rgbifパッケージの`name_backbone()`関数で、トキの学名*Nipponia nippon*を指定して種のデータを取得
 
-  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html)
+  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html) を参照
 
 ```{r}
 #| label: name_backbone
@@ -136,7 +137,7 @@ df |>
   )
 ```
 
-## 国別の頻度分布
+## 国別の頻度分布 {.r-output}
 
 トキの出現情報のある国の頻度分布を表示
 
