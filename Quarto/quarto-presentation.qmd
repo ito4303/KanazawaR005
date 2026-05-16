@@ -140,7 +140,7 @@ Rで作成したグラフがスライドに含まれる
 ```{r}
 #| label: plot-example
 #| echo: true
-#| eval: false
+#| output-location: slide
 
 library(ggplot2)
 data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
@@ -153,23 +153,6 @@ ggplot(penguins, aes(x = bill_len, y = bill_dep,
   theme_classic(base_size = 18, base_family = "YuGothic")
 ```
 
-------------------------------------------------------------------------
-
-```{r}
-#| label: plot-example-run
-#| echo: false
-
-library(ggplot2)
-data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
-ggplot(penguins, aes(x = bill_len, y = bill_dep,
-                     colour = species, shape = species)) +
-  geom_point(size = 3, alpha = 0.7) +
-  labs(title = "ペンギンのデータ",
-       x = "嘴峰長 (mm)", y = "嘴高 (mm)",
-       colour = "種", shape = "種") +
-  theme_classic(base_size = 18, base_family = "YuGothic")
-```
-
 ## 表
 
 - `knitr::kable()`や`gt::gt()`、`DT::datatable()`などの関数を利用可能
@@ -179,7 +162,7 @@ ggplot(penguins, aes(x = bill_len, y = bill_dep,
 ```{r}
 #| label: table-example
 #| echo: true
-#| eval: false
+#| output-location: slide
 
 library(gt)
 penguins |>
@@ -190,27 +173,6 @@ penguins |>
              island ~ "島",
              bill_len ~ "嘴峰長",
              bill_dep ~ "嘴高") |>
-  cols_units(starts_with("bill") ~ "mm",
-             .units_pattern = "{1} ({2})") |>
-  opt_stylize() |>
-  opt_table_font(size = 32)
-```
-
-------------------------------------------------------------------------
-
-```{r}
-#| label: table-example-run
-#| echo: false
-
-library(gt)
-penguins |>
-  dplyr::select(1:4) |>
-  dplyr::slice(c(1:3, 201:203, 301:303)) |>
-  gt(caption = "表: ペンギンのデータ") |>
-  cols_label(species ~"Spcies",
-             island ~ "Island",
-             bill_len ~ "Bill length",
-             bill_dep ~ "Bill depth") |>
   cols_units(starts_with("bill") ~ "mm",
              .units_pattern = "{1} ({2})") |>
   opt_stylize() |>
