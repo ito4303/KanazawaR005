@@ -5,7 +5,7 @@ date: 2026-05-30
 lang: ja
 format:
   revealjs:
-    theme: [Simple, custom.scss]
+    theme: [default, custom.scss]
     code-copy: true
     center-title-slide: false
 embed-resources: true
