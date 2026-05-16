@@ -6,11 +6,11 @@ $font-family-monospace: 'UDEV Gothic JPDOC', 'BIZ UDGothic', 'Noto Sans Mono', m
 $code-block-font-size: 0.7em;
 
 /*-- scss:rules --*/
-.cell-output, .cell-output-stdout { 
+
+// コード出力のスタイル
+.r-output .cell-output,
+.r-output .cell-output-stdout { 
   font-size: 95%;
-  border: 1px solid #4a90e2;
-  border-radius: 4px;
-  padding: 3px;
-  background-color: #e8f0fe;
-  margin: 10px 0;
+  margin: 5px 0 5px 0;
+  border: 2px solid #777;
 }
