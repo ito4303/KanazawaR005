@@ -16,7 +16,7 @@ slide-number: true
 
 2026年5月31日、羽咋市においてトキ野生復帰（石川県能登地域）の放鳥が実施されます
 
-![トキ (© Marco Mussita https://www.inaturalist.org/photos/77371650)](https://inaturalist-open-data.s3.amazonaws.com/photos/77371650/medium.jpeg){fig-align="center"}
+![トキ (© Marco Mussita www.inaturalist.org/photos/77371650)](https://inaturalist-open-data.s3.amazonaws.com/photos/77371650/medium.jpeg){fig-align="left"}
 
 ## 本日の内容
 
