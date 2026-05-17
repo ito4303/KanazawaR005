@@ -87,7 +87,7 @@ Reveal JSとKnitrを使用
 
 - 本文
 
-  - Markdown形式
+  - Markdown記法
 
   - コードや図表
 
@@ -109,8 +109,9 @@ format: revealjs
 
 ## 本文
 
-- マークダウン記法で記述
+- Markdown記法で記述
 - RやPythonなどのコードを実行できるように拡張
+- 計算結果や図表を貼り込み
 
 ## 見出し {.r-output}
 
