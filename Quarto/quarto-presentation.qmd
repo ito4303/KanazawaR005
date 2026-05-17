@@ -5,6 +5,7 @@ date: 2026-05-30
 lang: ja
 format:
   revealjs:
+    theme: [default, custom.scss]
     embed-resources: true
     slide-number: true
 ---
@@ -28,16 +29,16 @@ format:
 
 - **コピー&ペースト**で数値やグラフを貼り付けていると、**データに修正**があったとき
 
-  - **手作業でやり直し**
+  - **手作業**でやり直し
 
-  - **直し忘れがち**
+  - **直し忘れ**がち
 
     - **⇒ 再現可能性がない**
 :::
 
-## こうしたい
+## こうすれば
 
-::: incremental
+::: {.incremental style="margin-top: 2em; font-size: 150%;"}
 - データから結果（グラフ含む）まで一貫処理
 
 - QuartoとRで できます
@@ -60,7 +61,17 @@ format:
 
 - 再現可能な文書作成
 
-## RStudioから作成
+## インストール
+
+- RやRStudioとは別にインストールが必要
+
+<!-- -->
+
+- [Downloadページ](https://quarto.org/docs/download/)からインストーラーをダウンロードしてインストール
+
+- Homebrew (macOS) などのパッケージシステムからもインストール可能
+
+## RStudioでプレゼンテーション作成
 
 File \> New File \> Quarto Presentation
 
@@ -68,13 +79,23 @@ File \> New File \> Quarto Presentation
 
 Reveal JSとKnitrを使用
 
-## YAMLヘッダー
+## Quarto文書
 
-文書の先頭にメタデータを記述
+- YAMLヘッダー
+
+  - メタデータを記述
+
+- 本文
+
+  - Markdown記法
+
+  - コードや図表
+
+## YAMLヘッダー
 
 プレゼンテーションなら
 
-```         
+``` {.yaml style="margin: 1px solid grey;"}
 ---
 title: Quartoで、コピペミスしないプレゼンテーション資料作成
 author: 伊東宏樹
@@ -84,20 +105,21 @@ format: revealjs
 ---
 ```
 
-`format: revealjs`で、[reveal.js](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
+`format: revealjs`で、[Reveal JS](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
 
-## 見出し
+## 本文
+
+- Markdown記法で記述
+- RやPythonなどのコードを実行できるように拡張
+- 計算結果や図表を貼り込み
+
+## 見出し {.r-output}
 
 - Heading 2 (`##`)が各スライドの見出し
 
 - スライドの区切りでもある
 
-## 本文
-
-- マークダウン記法で記述
-- RやPythonなどのコードを実行できるように拡張
-
-## コードチャンク（コードセル）
+## コードチャンク（コードセル） {.r-output}
 
 ```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
 
@@ -139,7 +161,7 @@ Rで作成したグラフがスライドに含まれる
 ```{r}
 #| label: plot-example
 #| echo: true
-#| eval: false
+#| output-location: slide
 
 library(ggplot2)
 data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
@@ -152,23 +174,6 @@ ggplot(penguins, aes(x = bill_len, y = bill_dep,
   theme_classic(base_size = 18, base_family = "YuGothic")
 ```
 
-------------------------------------------------------------------------
-
-```{r}
-#| label: plot-example-run
-#| echo: false
-
-library(ggplot2)
-data(penguins)  # R 4.5.0からpenguinsデータが組み込まれました
-ggplot(penguins, aes(x = bill_len, y = bill_dep,
-                     colour = species, shape = species)) +
-  geom_point(size = 3, alpha = 0.7) +
-  labs(title = "ペンギンのデータ",
-       x = "嘴峰長 (mm)", y = "嘴高 (mm)",
-       colour = "種", shape = "種") +
-  theme_classic(base_size = 18, base_family = "YuGothic")
-```
-
 ## 表
 
 - `knitr::kable()`や`gt::gt()`、`DT::datatable()`などの関数を利用可能
@@ -178,51 +183,30 @@ ggplot(penguins, aes(x = bill_len, y = bill_dep,
 ```{r}
 #| label: table-example
 #| echo: true
-#| eval: false
+#| output-location: slide
 
 library(gt)
 penguins |>
   dplyr::select(1:4) |>
   dplyr::slice(c(1:3, 201:203, 301:303)) |>
   gt(caption = "表: ペンギンのデータ") |>
-  cols_label(species ~ "種",
-             island ~ "島",
-             bill_len ~ "嘴峰長",
-             bill_dep ~ "嘴高") |>
+  cols_label(species ~ "種", island ~ "島",
+             bill_len ~ "嘴峰長", bill_dep ~ "嘴高") |>
   cols_units(starts_with("bill") ~ "mm",
              .units_pattern = "{1} ({2})") |>
   opt_stylize() |>
   opt_table_font(size = 32)
 ```
 
-------------------------------------------------------------------------
-
-```{r}
-#| label: table-example-run
-#| echo: false
-
-library(gt)
-penguins |>
-  dplyr::select(1:4) |>
-  dplyr::slice(c(1:3, 201:203, 301:303)) |>
-  gt(caption = "表: ペンギンのデータ") |>
-  cols_label(species ~"Spcies",
-             island ~ "Island",
-             bill_len ~ "Bill length",
-             bill_dep ~ "Bill depth") |>
-  cols_units(starts_with("bill") ~ "mm",
-             .units_pattern = "{1} ({2})") |>
-  opt_stylize() |>
-  opt_table_font(size = 32)
-```
-
-## 数式
+## 数式(1)
 
 - LaTeX記法で数式を記述できる
 
 - 本文中に数式を含めるとき
 
   - `$`と`$`の間に数式を記述: `$\sqrt{x}$` = $\sqrt{x}$
+
+## 数式(2)
 
 - 別立てで数式を含めるとき
 
@@ -250,9 +234,9 @@ quarto render file_name.qmd
 
 ## PDF出力
 
-Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力可能
+- Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力可能
 
-- （ブラウザによっては ずれるかもしれません。Chromeが推奨されています。）
+- ブラウザによっては ずれるかもしれません。Chromeが推奨されています。
 
 ## まとめ
 
