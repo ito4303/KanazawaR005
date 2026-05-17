@@ -34,7 +34,7 @@ slide-number: true
 
 ## GBIFとは
 
-- GBIF [(Global Biodiversity](https://www.gbif.org/) [Information](https://www.gbif.org/ja/) [Facility](https://www.gbif.org/)、じーびふ)
+- GBIF（[Global Biodiversity Information Facility](https://www.gbif.org/ja/)、じーびふ）
 
 ::: {style="font-size: 85%;"}
 > GBIF－地球規模生物多様性情報機構は、地球上のあらゆる種類の生物に関するデータを誰でも、どこにでも、オープンアクセスで提供することを目的として、世界中の政府から資金提供されて設置された国際的なネットワークであり、データ基盤です。
