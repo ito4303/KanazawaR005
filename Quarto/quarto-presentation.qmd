@@ -121,7 +121,7 @@ format: revealjs
 
 - スライドの区切りでもある
 
-## コードチャンク（コードセル） {.r-output}
+## コードセル（コードチャンク） {.r-output}
 
 ```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
 
@@ -138,16 +138,21 @@ mean(1:100)
 mean(1:100)
 ```
 
-## チャンクオプション
+::: {style="margin-top: 1em; font-size: 90%;"}
+```` ```{r} ````の下の`#|`で始まる行はセルオプション
+:::
 
-- `#| label: ラベル` - チャンクラベル（`label: setup`は初期設定チャンク）
-- `#| echo: true/false` - コードを表示するか
-- `#| output: true/false` - 結果を表示するか
-- `#| eval: true/false` - コードを実行するか
-- `#| include: true/false` - コードと結果を表示するか（実行はされる）
-- など
+## セルオプション
 
-詳細はQuartoのレファレンス [Code Cells: Knitr](https://quarto.org/docs/reference/cells/cells-knitr.html) を参照
+| オプション | 説明 |
+|------------------------------------|------------------------------------|
+| `#| label: ラベル` | ラベル[（`setup`は初期設定セル）]{style="font-size: 90%;"} |
+| `#| echo: true/false` | コードを表示するか |
+| `#| output: true/false` | 結果を表示するか |
+| `#| eval: true/false` | コードを実行するか |
+| `#| include: true/false` | コード・結果を表示するか[（実行はする）]{style="font-size: 90%;"} |
+
+ほか多数。詳細はQuartoのレファレンス [Code Cells: Knitr](https://quarto.org/docs/reference/cells/cells-knitr.html) を参照。
 
 ## インラインコード
 
@@ -237,7 +242,11 @@ quarto render file_name.qmd
 
 ## PDF出力
 
-- Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力可能
+- Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、
+
+  - 左下の「≡」からTools \> PDF Export Modeにして、
+
+  - ブラウザのプリントでPDF出力可能
 
 - ブラウザによっては ずれるかもしれません。Chromeが推奨されています。
 
