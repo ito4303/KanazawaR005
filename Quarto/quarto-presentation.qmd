@@ -18,7 +18,7 @@ format:
 
 ## 役所とかの資料でありがちな例
 
-![生成AI (Gemini) で作成したイメージです。実在の組織・団体とは関係ありません。](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png)
+![[生成AI (Gemini) で作成したイメージです。実在の組織・団体とは関係ありません。]{style="font-size: 80%;"}](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png){fig-align="left"}
 
 ## 問題点
 
@@ -57,19 +57,20 @@ format:
 
 - Python, R, Julia, Observableに対応
 
-- HTML, PDF, MS Word等の形式で出力
+- HTML, PDF, MS Word, PowerPointなどの形式で、ドキュメント、プレゼンテーション、ウェブサイト等を作成
 
 - 再現可能な文書作成
 
 ## インストール
 
-- RやRStudioとは別にインストールが必要
+- Quartoは独立したソフトウェア
 
-<!-- -->
+- 最近のRStudioにはQuartoが含まれているが、別にインストールすることも可能
 
-- [Downloadページ](https://quarto.org/docs/download/)からインストーラーをダウンロードしてインストール
+- 別にインストールする場合
 
-- Homebrew (macOS) などのパッケージシステムからもインストール可能
+  - [Downloadページ](https://quarto.org/docs/download/)からインストーラーをダウンロードしてインストール
+  - Homebrew (macOS) などのパッケージシステムからもインストール可能
 
 ## RStudioでプレゼンテーション作成
 
@@ -87,7 +88,7 @@ Reveal JSとKnitrを使用
 
 - 本文
 
-  - Markdown記法
+  - Markdown記法（RMarkdown上位互換）
 
   - コードや図表
 
@@ -109,8 +110,9 @@ format: revealjs
 
 ## 本文
 
-- Markdown記法で記述
-- RやPythonなどのコードを実行できるように拡張
+- Markdown記法で記述（RMarkdown上位互換）
+  - RStudioでは、Visualモードでの編集もあり
+- RやPythonなどのコードを実行可能
 - 計算結果や図表を貼り込み
 
 ## 見出し {.r-output}
@@ -119,32 +121,38 @@ format: revealjs
 
 - スライドの区切りでもある
 
-## コードチャンク（コードセル） {.r-output}
+## コードセル（コードチャンク） {.r-output}
 
 ```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
 
 ```{{r}}
+#| label: calc-mean
+
 mean(1:100)
 ```
 
 ```{r}
+#| label: calc-mean
 #| echo: false
 
 mean(1:100)
 ```
 
-## オプション
+::: {style="margin-top: 1em; font-size: 90%;"}
+```` ```{r} ````の下の`#|`で始まる行はセルオプション
+:::
 
-`#|` のあとに記述
+## セルオプション
 
-- `#| label: ラベル` - チャンクラベル
-- `#| echo: true/false` - コードを表示するか
-- `#| output: true/false` - 結果を表示するか
-- `#| eval: true/false` - コードを実行するか
-- `#| include: true/false` - コードと結果を表示するか（実行はされる）
-- など
+| オプション | 説明 |
+|------------------------------------|------------------------------------|
+| `#| label: ラベル` | ラベル[（`setup`は初期設定セル）]{style="font-size: 90%;"} |
+| `#| echo: true/false` | コードを表示するか |
+| `#| output: true/false` | 結果を表示するか |
+| `#| eval: true/false` | コードを実行するか |
+| `#| include: true/false` | コード・結果を表示するか[（実行はする）]{style="font-size: 90%;"} |
 
-詳細はQuartoのレファレンス [Code Cells: Knitr](https://quarto.org/docs/reference/cells/cells-knitr.html) を参照
+ほか多数。詳細はQuartoのレファレンス [Code Cells: Knitr](https://quarto.org/docs/reference/cells/cells-knitr.html) を参照。
 
 ## インラインコード
 
@@ -234,7 +242,11 @@ quarto render file_name.qmd
 
 ## PDF出力
 
-- Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、左下の「≡」からTools \> PDF Export Modeにして、ブラウザのプリントでPDF出力可能
+- Reveal JSのHTMLファイルとして出力したプレゼンテーション資料は、
+
+  - 左下の「≡」からTools \> PDF Export Modeにして、
+
+  - ブラウザのプリントでPDF出力可能
 
 - ブラウザによっては ずれるかもしれません。Chromeが推奨されています。
 
