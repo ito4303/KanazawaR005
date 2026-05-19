@@ -52,7 +52,7 @@ format:
 
 - テキストファイルで文書の構造や内容を記述
 
-  - Markdownを拡張した記法
+  - RMarkdown上位互換
   - Gitなどによるバージョン管理
 
 - Python, R, Julia, Observableに対応
