@@ -14,7 +14,7 @@ format:
 
 - Quartoとは
 
-- Quartoをつかった資料作成
+- Quartoをつかったプレゼンテーション資料作成
 
 ## 役所とかの資料でありがちな例
 
@@ -44,6 +44,8 @@ format:
 - QuartoとRで できます
 :::
 
+# Quartoとは
+
 ## Quarto
 
 - <https://quarto.org/>
@@ -70,7 +72,9 @@ format:
   - [Downloadページ](https://quarto.org/docs/download/)からインストーラーをダウンロードしてインストール
   - Homebrew (macOS) などのパッケージシステムからもインストール可能
 
-## RStudioでプレゼンテーション作成
+# Quartoをつかった<br />プレゼンテーション<br />資料作成
+
+## RStudioから
 
 File \> New File \> Quarto Presentation
 
@@ -106,22 +110,48 @@ format: revealjs
 
 `format: revealjs`で、[Reveal JS](https://revealjs.com/)をつかったHTMLのプレゼンテーションファイル作成
 
+## 見出し {.r-output}
+
+- `#`または`##`でページ区切り
+
+  - Heading 1 (`#`)がセクション区切り
+
+  - Heading 2 (`##`)が各スライドの見出し
+
+- スライドの区切りでもある
+
 ## 本文
 
 - Markdown記法で記述（RMarkdown上位互換）
   - RStudioでは、Visualモードでの編集もあり
 - RやPythonなどのコードを実行可能
-- 計算結果や図表を貼り込み
+- 画像、計算結果、計算結果の図表を貼り込み
 
-## 見出し {.r-output}
+## 例
 
-- Heading 2 (`##`)が各スライドの見出し
+``` {style="margin-top: 1em; border: 1px solid black; padding: 5px;"}
+## 例
 
-- スライドの区切りでもある
+- リンク: [Quarto](https://quarto.org/)
+
+- 画像ファイルの貼り込み:
+  
+![画像の貼り込み](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png){fig-align="left" width="440"}
+```
+
+## 例（レンダリング）
+
+- リンク: [Quarto](https://quarto.org/)
+
+- 画像ファイルの貼り込み:
+
+![画像の貼り込み](images/Gemini_Generated_Image_jbi5dkjbi5dkjbi5-2.png){fig-align="left" width="440"}
 
 ## コードセル（コードチャンク） {.r-output}
 
+::: {style="margin-top: 1em;"}
 ```` ```{r} ````と```` ``` ````で はさまれた行にRのコードを記述する。レンダリング時に実行されて、結果が表示される。
+:::
 
 ```{{r}}
 #| label: calc-mean
@@ -143,7 +173,7 @@ mean(1:100)
 ## セルオプション
 
 | オプション | 説明 |
-|----|----|
+|------------------------------------|------------------------------------|
 | `#| label: ラベル` | ラベル[（`setup`は初期設定セル）]{style="font-size: 90%;"} |
 | `#| echo: true/false` | コードを表示するか |
 | `#| output: true/false` | 結果を表示するか |
@@ -250,13 +280,15 @@ quarto render file_name.qmd
 
   - Chromeが推奨されていますが、Firefoxも大丈夫そう。
 
-## まとめ
+# まとめ
 
+::: {style="margin-top: 1em;"}
 - Quartoをつかって
 
   - データから結果まで一貫処理
 
-  - 再現可能性のある文書作成
+  - 再現可能な文書作成
+:::
 
 ::: {style="text-align: center; font-size: 400%;"}
 🥳
