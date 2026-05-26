@@ -1,5 +1,5 @@
 ---
-title: "<br />トキの分布をしらべる<br />&nbsp;<br />&nbsp;"
+title: "トキの分布をしらべる"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
@@ -7,7 +7,6 @@ format:
   revealjs:
     theme: [default, custom.scss]
     code-copy: true
-    center-title-slide: false
 embed-resources: true
 slide-number: true
 ---
