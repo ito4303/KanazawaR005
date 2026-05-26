@@ -101,6 +101,8 @@ format:
 
 - [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
 
+  - CRAN登録件数: 23733（2026年5月23日現在）
+
 - 専門的な統計解析用のパッケージでもいろいろ揃っている
 
 - ユーザーが自分で作って公開できる
@@ -110,8 +112,6 @@ format:
 分野ごとのパッケージの概要
 
 - <https://cran.r-project.org/web/views/>
-
-<!-- -->
 
 - 日本語訳: <https://www.trifields.jp/r-cran-task-views-639>
 

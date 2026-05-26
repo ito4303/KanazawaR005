@@ -43,9 +43,11 @@ c("AB", "CD", "EF") # 文字列のベクトル
 
 # 代入
 
-X <- c("AB", "CD", "EF") # Xというオブジェクトに代入
+X <- c("AB", "CD", "EF") # Xという変数に代入
 
-# オブジェクトの内容を表示
+# Rでは変数宣言は不要
+
+# 変数の内容を表示
 
 X
 print(X) # print()関数で明示的に表示
@@ -141,10 +143,26 @@ b
 # ベクトルで処理する
 
 rm("b")  # いったんbを消去
+
+# 各要素に1をたす
+
 b <- a + 1
 b
 
-# 関数でも
+# スカラー倍
+
+c <- a * 2
+c
+
+# 和
+
+b + c
+
+# 要素ごとの積
+
+b * c
+
+# 関数の引数にベクトル
 
 exp(a)
 log(b)
@@ -269,11 +287,11 @@ Kion_long |>
 # パッケージをつかった例
 #
 
-# setariaviridisパッケージがインストールされていなければ
-# インストールする
-
 # setariaviridis は、エノコログサ(Setaria viridis)の測定データを収めた
 # パッケージ
+
+# setariaviridisパッケージがインストールされていなければ
+# インストールする
 
 if (!requireNamespace("setariaviridis", quietly = TRUE)) {
   install.packages("setariaviridis")
