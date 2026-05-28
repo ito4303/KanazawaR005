@@ -105,13 +105,29 @@ x <- occ_download_get(occ_info)
 df <- occ_download_import(x)
 ```
 
+## 2回目以降
+
+ダウンロード済みのファイルを読み込む
+
 ```{r}
 #| label: gbif_download_import
-#| echo: false
+#| echo: true
 
-# 2回目以降はダウンロード済みのファイルがあるのでそちらを読み込む
-download_file <- "0012446-260507073636908.zip"
+download_file <- list.files(pattern = "*.zip")[1]
 df <- occ_download_import(as.download(download_file))
+```
+
+## 引用情報の表示 {.r-output}
+
+GBIFのデータをダウンロードして研究成果等に使うときはDOIで引用（[Citing GBIF Mediated Data](https://docs.ropensci.org/rgbif/articles/gbif_citations.html)）
+
+```{r}
+#| label: citation
+#| echo: true
+
+key <- tools::file_path_sans_ext(download_file)
+occ_download_meta(key = key) |>
+  gbif_citation()
 ```
 
 ## データの確認
