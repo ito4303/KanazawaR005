@@ -84,13 +84,13 @@ Reveal JSとKnitrを使用
 
 ## Quarto文書
 
-- YAMLヘッダー
+- [YAML](https://ja.wikipedia.org/wiki/YAML)ヘッダー
 
-  - メタデータを記述
+  - メタデータや設定を記述
 
 - 本文
 
-  - Markdown記法（RMarkdown上位互換）
+  - Markdown記法（R Markdown上位互換）
 
   - コードや図表
 
@@ -100,8 +100,8 @@ Reveal JSとKnitrを使用
 
 ``` {.yaml style="margin: 1px solid grey;"}
 ---
-title: Quartoで、コピペミスしないプレゼンテーション資料作成
-author: 伊東宏樹
+title: タイトル
+author: 著者名
 date: 2026-05-30
 lang: ja
 format: revealjs
@@ -125,7 +125,7 @@ format: revealjs
 - Markdown記法で記述（R Markdown上位互換）
   - RStudioでは、Visualモードでの編集もあり
 - RやPythonなどのコードを実行可能
-- 画像、計算結果、計算結果の図表を貼り込み
+- 画像、計算結果、計算結果の図表を貼り込み可能
 
 ## 例
 
