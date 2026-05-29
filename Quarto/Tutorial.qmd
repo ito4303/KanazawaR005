@@ -57,13 +57,17 @@ format:
 
 - R MarkdownやQuartoによる文書作成
 
-- 2026.04版から[Posit AI](https://posit.co/products/ai)を統合（Posit AssistantとNext Edit Suggestions）
+- 2026.04版から[Posit AI](https://posit.co/products/ai)を統合
+
+  ::: notes
+  Posit AssistantとNext Edit Suggestions
+  :::
 
 - ダウンロード: <https://posit.co/download/rstudio-desktop/>
 
 ## Positron
 
-- Posit社が開発している[データサイエンス](https://positron.posit.co/)IDE
+- Posit社が開発しているデータサイエンスIDE
 
 - R以外にPythonにも対応
 
@@ -75,17 +79,13 @@ format:
 
 ## Rのインストール
 
-- CRAN (Comprehensive R Archive Network) からインストーラーをダウンロード
+- <abbr title="Comprehensive R Archive Network">[CRAN](https://cran.r-project.org/)</abbr> からインストーラーをダウンロード
 
-  - ミラー
+  - [ミラー](https://cran.r-project.org/mirrors.html)
 
     - 日本 <https://ftp.yz.yamagata-u.ac.jp/pub/cran/>
 
     - クラウド <https://cloud.r-project.org/>
-
-- 各OS用パッケージシステム（Homebrew, winget, ...）からもインストールできる
-
-  - RStudioもHomebrewやwingetでインストール可能
 
 ## 具体的なインストール方法
 
@@ -97,13 +97,25 @@ format:
 
 - [はじめてのR言語 with Gemini CLI](https://www.trifields.jp/document/r-beginner-with-gemini-cli.html) (西本さん)
 
+## パッケージシステムによるインストール
+
+- 各OS用パッケージシステムからもインストールできる
+
+  - winget (Windows)
+
+  - Homebrew (macOS)
+
+  - など
+
+- RStudioもwingetやHomebrewでインストール可能
+
 ## パッケージ
 
 - 特定の解析方法やツールなどの関数やデータなどをまとめたもの
 
   - 専門的な統計解析用のパッケージでもいろいろ揃っている
 
-- [CRAN](https://cran.r-project.org/mirrors.html)などからインストールできる
+- CRANなどからインストールできる
 
   - CRAN登録件数: 23783（2026年5月29日現在）
 
