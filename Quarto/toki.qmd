@@ -1,5 +1,5 @@
 ---
-title: "トキの分布をしらべる"
+title: "トキ<br /> (*Nipponia nippon*) の分布をしらべる"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
@@ -64,8 +64,6 @@ library(rgbif)
 
 - rgbifパッケージの`name_backbone()`関数で、トキの学名*Nipponia nippon*を指定して種のデータを取得
 
-  - GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html) を参照
-
 ```{r}
 #| label: name_backbone
 #| echo: true
@@ -79,6 +77,7 @@ species_data |>
 
 - `occ_download()`関数でダウンロードを要求
   - `pred()`関数で`taxonKey`にトキのusageKeyを指定
+- GBIFのアカウントが必要。rgbifの設定は [Set Up Your GBIF Username and Password](https://docs.ropensci.org/rgbif/articles/gbif_credentials.html) を参照
 
 ```{r}
 #| label: occ_download
