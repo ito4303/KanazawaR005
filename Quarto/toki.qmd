@@ -1,11 +1,11 @@
 ---
-title: "トキ<br /> (*Nipponia nippon*) の分布をしらべる"
+title: "トキ (*Nipponia nippon*) の分布をしらべる"
 author: "伊東宏樹"
 date: 2026-05-30
 lang: ja
 format:
   revealjs:
-    theme: [default, custom.scss]
+    theme: [default, custom_small_h1.scss]
     code-copy: true
 embed-resources: true
 slide-number: true
@@ -20,7 +20,9 @@ slide-number: true
 ## 本日の内容
 
 ::: incremental
-- Kanazawa.R #1での発表「[Rで生物多様性情報を取得する](https://ito4303.github.io/KanazawaR001/rgbif.html)」では、コウノトリの出現 (Occurrence) 情報を地図にプロット
+- Kanazawa.R #1での発表「[Rで生物多様性情報を取得する](https://ito4303.github.io/KanazawaR001/rgbif.html)」
+
+  - コウノトリの出現 (Occurrence) 情報を地図にプロット
 
 - 今回は[**トキ**]{style="color: red;"}
 

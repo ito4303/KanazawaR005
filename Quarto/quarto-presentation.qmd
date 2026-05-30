@@ -1,11 +1,11 @@
 ---
-title: Quartoで、<br />コピペミスしない<br />プレゼンテーション<br />資料作成
+title: Quartoで、コピペミスしない<br />プレゼンテーション資料作成
 author: 伊東宏樹
 date: 2026-05-30
 lang: ja
 format:
   revealjs:
-    theme: [default, custom.scss]
+    theme: [default, custom_small_h1.scss]
     embed-resources: true
     slide-number: true
 ---
