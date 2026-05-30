@@ -37,6 +37,8 @@ format:
 
 ## Rとは?
 
+- <https://www.r-project.org/>
+
 - [統計計算とグラフィックスのためのシステム](https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f)（言語と環境）
 
 - オープンソース
@@ -48,6 +50,8 @@ format:
   - 統計解析の手法はだいたいなんでもある
 
 ## RStudio
+
+- <https://posit.co/download/rstudio-desktop>
 
 - [Posit](https://posit.co/)社が開発しているR向け統合開発環境（IDE）
 
@@ -63,17 +67,15 @@ format:
   Posit AssistantとNext Edit Suggestions
   :::
 
-- ダウンロード: <https://posit.co/download/rstudio-desktop/>
-
 ## Positron
+
+- <https://positron.posit.co/>
 
 - Posit社が開発しているデータサイエンスIDE
 
 - R以外にPythonにも対応
 
 - VS Codeベース
-
-- ダウンロード: <https://positron.posit.co/download.html>
 
 - おもにRを使うR初心者にはRStudioの方がおすすめ
 
@@ -97,7 +99,7 @@ format:
 
 - [はじめてのR言語 with Gemini CLI](https://www.trifields.jp/document/r-beginner-with-gemini-cli.html) (西本さん)
 
-## パッケージシステムによるインストール
+## パッケージシステムから
 
 - 各OS用パッケージシステムからもインストールできる
 
