@@ -296,12 +296,17 @@ Kion_long |>
 # setariaviridisパッケージがインストールされていなければ
 # インストールする
 
-if (!requireNamespace("setariaviridis", quietly = TRUE)) {
+if (!require(setariaviridis, quietly = TRUE)) {
+  # requireはパッケージを読み込む関数だが、
+  # 指定のパッケージがインストールされていなければFALSEを
+  # 返す
+
+  # インストールされていなければインストールする
   install.packages("setariaviridis")
+  library(setariaviridis)
 }
 # '!'は、TRUE/FALSEを反転させる演算子
 
-library(setariaviridis) # library関数でパッケージを読み込む
 help(setariaviridis) # パッケージのヘルプを表示
 
 View(setaria_viridis)    # データを表計算ソフトのように表示
